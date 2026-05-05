@@ -50,3 +50,4 @@ reportlab
 arabic-reshaper
 python-bidi
 requests
+rapidfuzz
