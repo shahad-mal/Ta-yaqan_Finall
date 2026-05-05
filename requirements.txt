@@ -46,3 +46,6 @@ typer==0.24.1
 typing_extensions==4.15.0
 Werkzeug==3.1.5
 yt-dlp==2026.2.21
+reportlab
+arabic-reshaper
+python-bidi
