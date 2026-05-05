@@ -358,40 +358,45 @@ def prepare_audio(source: str) -> str:
 # الخطوة 2 — whisper
 # ─────────────────────────────────────────────
 def run_whisper(wav: str, prompt: str = None) -> dict:
-    from faster_whisper import WhisperModel
+    import os
+    import requests
 
-    mdl = WhisperModel(WHISPER_SIZE, device=DEVICE, compute_type='int8')
+    colab_url = os.getenv("COLAB_ASR_URL")
 
-    segs, _ = mdl.transcribe(
-        wav,
-        language='ar',
-        word_timestamps=True,
-        beam_size=5,
-        best_of=5,
-        temperature=0,
-        condition_on_previous_text=True,
-        initial_prompt=prompt or get_whisper_prompt(),
-        vad_filter=True,
-        vad_parameters={"min_silence_duration_ms": 500},
-    )
+    if not colab_url:
+        raise RuntimeError("COLAB_ASR_URL غير موجود في Render Environment Variables")
+
+    with open(wav, "rb") as f:
+        response = requests.post(
+            colab_url,
+            files={"file": f},
+            timeout=300
+        )
+
+    response.raise_for_status()
+    data = response.json()
+
+    text = normalize(data.get("text", ""))
 
     words = []
-    for seg in segs:
-        for w in (seg.words or []):
-            norm_word = normalize(w.word.strip())
-            if not norm_word:
-                continue
-            words.append({
-                'word'      : norm_word,
-                'start'     : round(w.start, 2),
-                'end'       : round(w.end,   2),
-                'confidence': round(w.probability, 3),
-                'source'    : 'whisper',
-            })
+    current_time = 0.0
 
-    text = ' '.join(w['word'] for w in words)
-    print(f"\n🎙️ DEBUG whisper: {text[:220]}")
-    return {'text': text, 'words': words}
+    for word in text.split():
+        words.append({
+            "word": word,
+            "start": current_time,
+            "end": current_time + 0.5,
+            "confidence": 1.0,
+            "source": "colab_whisper",
+        })
+        current_time += 0.5
+
+    print(f"\n🎙️ DEBUG Colab whisper: {text[:220]}")
+
+    return {
+        "text": text,
+        "words": words
+    }
 
 
 # ─────────────────────────────────────────────

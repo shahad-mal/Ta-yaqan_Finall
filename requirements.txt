@@ -49,3 +49,4 @@ yt-dlp==2026.2.21
 reportlab
 arabic-reshaper
 python-bidi
+requests
