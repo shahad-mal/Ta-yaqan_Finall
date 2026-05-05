@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | إدارة المستخدمين{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item {% if request.endpoint == 'main.admin_dashboard' %}side__item--active{% endif %}"
+         href="{{ url_for('main.admin_dashboard') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/zap.png') }}" alt="نظرة عامة"></span>
+        <span>نظرة عامة</span>
+      </a>
+      <a class="side__item side__item--active" href="{{ url_for('main.admin_users') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/users.png') }}" alt="المستخدمين"></span>
+        <span>إدارة المستخدمين</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_verifications' %}side__item--active{% endif %}"
+         href="{{ url_for('main.admin_verifications') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="التلاوات"></span>
+        <span>التلاوات والتحقق</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_reports' %}side__item--active{% endif %}"
+         href="{{ url_for('main.admin_reports') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reportpage.png') }}" alt="التقارير"></span>
+        <span>التقارير العامة</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+
+    <div class="rp-header">
+      <div>
+        <h1 class="rp-header__title">إدارة المستخدمين</h1>
+        <p class="rp-header__sub">عرض وإدارة جميع مستخدمي النظام</p>
+      </div>
+    </div>
+
+    <!-- شريط البحث -->
+    <div class="rp-card" style="margin-bottom:16px;">
+      <div class="ad-search-bar">
+        <div class="ad-search-wrap">
+          <img src="{{ url_for('static', filename='img/target.png') }}" alt="بحث">
+          <input type="text" class="ad-search" id="userSearch" placeholder="ابحث عن مستخدم...">
+        </div>
+      </div>
+    </div>
+
+    <!-- جدول المستخدمين -->
+    <div class="rp-card">
+      <div class="ad-table-wrap">
+        <table class="ad-table">
+          <thead>
+            <tr>
+              <th>المستخدم</th>
+              <th>البريد الإلكتروني</th>
+              <th style="text-align:center;">عدد التحققات</th>
+              <th>آخر نشاط</th>
+              <th style="text-align:center;">الحالة</th>
+              <th style="text-align:center;">التفاصيل</th>
+              <th style="text-align:center;">حذف</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            {% for u in users %}
+            {% set last = u.inputs | selectattr('processingdate', 'ne', none) | sort(attribute='processingdate', reverse=True) | first %}
+            {% if last and last.processingdate %}
+              {% set days_diff = (now - last.processingdate).days %}
+              {% set is_active = days_diff <= 3 %}
+            {% else %}
+              {% set is_active = false %}
+            {% endif %}
+            <tr data-name="{{ u.verifiername | lower }}" data-email="{{ u.verifieremail | lower }}">
+
+              <!-- الاسم -->
+              <td>
+                <div class="ad-user-cell">
+                  <div class="ad-avatar">{{ u.verifiername[0] | upper }}</div>
+                  <span style="font-weight:700; color:#2d2d2d;">{{ u.verifiername }}</span>
+                </div>
+              </td>
+
+              <!-- البريد -->
+              <td style="color:#6b7280; font-size:13px;">{{ u.verifieremail }}</td>
+
+              <!-- عدد التحققات -->
+              <td style="text-align:center;">
+                <span class="ad-badge ad-badge--count">{{ u.inputs | length }}</span>
+              </td>
+
+              <!-- آخر نشاط -->
+              <td style="color:#6b7280; font-size:13px;">
+                {% if last and last.processingdate %}
+                  {{ last.processingdate.strftime('%Y-%m-%d') }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+
+              <!-- الحالة -->
+              <td style="text-align:center;">
+                {% if is_active %}
+                  <span class="ad-badge ad-badge--active">نشط</span>
+                {% else %}
+                  <span class="ad-badge ad-badge--inactive">غير نشط</span>
+                {% endif %}
+              </td>
+
+              <!-- ✅ زر التفاصيل - يروح للصفحة الجديدة -->
+       <td style="text-align:center;">
+  <a href="{{ url_for('main.admin_user_detail', user_id=u.verifierid) }}"
+     style="display:inline-flex; align-items:center; justify-content:center;
+            width:32px; height:32px;
+            background:transparent;
+            border:none;
+            text-decoration:none;
+            padding:0;
+            cursor:pointer;">
+
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+         stroke="#8E83A9" stroke-width="2.2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+
+  </a>
+</td>
+
+              <!-- حذف -->
+              <td style="text-align:center;">
+                <button onclick="confirmDelete({{ u.verifierid }}, '{{ u.verifiername }}')"
+                        style="background:#fee2e2; border:1px solid #fecaca; border-radius:7px;
+                               padding:6px 10px; cursor:pointer; color:#dc2626;
+                               font-size:12px; font-weight:600; transition:background .2s;"
+                        onmouseover="this.style.background='#fecaca'"
+                        onmouseout="this.style.background='#fee2e2'">
+                  حذف
+                </button>
+              </td>
+
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if not users %}
+      <p style="text-align:center; color:#999; padding:40px;">لا يوجد مستخدمون</p>
+      {% endif %}
+    </div>
+
+  </main>
+</div>
+
+<!-- Modal تأكيد الحذف -->
+<div id="deleteModal" style="display:none; position:fixed; inset:0;
+     background:rgba(0,0,0,0.35); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:20px; padding:28px 24px; max-width:400px; width:90%;
+              text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.15); direction:rtl;">
+    <div style="width:56px; height:56px; background:#fee2e2; border-radius:16px;
+                display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:26px;">
+      🗑️
+    </div>
+    <h3 style="margin:0 0 8px; font-size:18px; color:#1f2937;">تأكيد الحذف</h3>
+    <p id="deleteMsg" style="margin:0 0 20px; color:#6b7280; font-size:14px; line-height:1.7;"></p>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button onclick="closeDeleteModal()"
+              style="padding:10px 24px; border-radius:12px; border:1.5px solid #e5e7eb;
+                     background:#fff; color:#374151; font-family:inherit; font-size:14px;
+                     font-weight:700; cursor:pointer;">
+        إلغاء
+      </button>
+      <button id="confirmDeleteBtn"
+              style="padding:10px 24px; border-radius:12px; border:none;
+                     background:#dc2626; color:#fff; font-family:inherit; font-size:14px;
+                     font-weight:700; cursor:pointer;">
+        حذف
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* بحث */
+document.getElementById('userSearch').addEventListener('input', function() {
+  var val = this.value.toLowerCase();
+  document.querySelectorAll('#usersTableBody tr').forEach(function(row) {
+    var name  = (row.dataset.name  || '').toLowerCase();
+    var email = (row.dataset.email || '').toLowerCase();
+    row.style.display = (name.includes(val) || email.includes(val)) ? '' : 'none';
+  });
+});
+
+/* حذف */
+var pendingUserId = null;
+
+function confirmDelete(userId, userName) {
+  pendingUserId = userId;
+  document.getElementById('deleteMsg').textContent =
+    'هل أنت متأكد من حذف المستخدم "' + userName + '"؟ لا يمكن التراجع عن هذا الإجراء.';
+  document.getElementById('deleteModal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').style.display = 'none';
+  pendingUserId = null;
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+  if (!pendingUserId) return;
+  fetch('/admin/delete-user/' + pendingUserId, { method: 'POST' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        closeDeleteModal();
+        window.location.reload();
+      }
+    });
+});
+</script>
+{% endblock %}

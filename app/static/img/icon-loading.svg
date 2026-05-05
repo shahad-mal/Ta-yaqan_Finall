@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <!-- Background circle (faint) -->
+  <circle cx="60" cy="60" r="28" stroke="#E0E0E0" stroke-width="7" fill="none"/>
+  <!-- Spinning arc -->
+  <circle cx="60" cy="60" r="28"
+    stroke="#3C3C3C"
+    stroke-width="7"
+    fill="none"
+    stroke-linecap="round"
+    stroke-dasharray="60 116"
+    stroke-dashoffset="0"
+    transform="rotate(-90 60 60)">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="-90 60 60"
+      to="270 60 60"
+      dur="1s"
+      repeatCount="indefinite"/>
+  </circle>
+</svg>

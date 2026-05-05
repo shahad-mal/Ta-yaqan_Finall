@@ -1,0 +1,1335 @@
+:root{
+  --bg:#f6f7f8;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+
+  --shadow: 0 10px 24px rgba(16,24,40,.08);
+  --radius: 18px;
+
+  --purple:#64449a;
+  --purple-50:#f5f3ff;
+
+  --ok:#22c55e;
+  --ok-50:#ecfdf3;
+
+  --bad:#ef4444;
+  --bad-50:#fff1f2;
+
+  --warn:#f59e0b;
+  --warn-50:#fff7ed;
+
+  --miss:#fb923c;
+  --miss-50:#fff7ed;
+
+  --player:#0b7a5b;
+  --playerText:#eafff7;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+  background:
+    radial-gradient(1100px 360px at 50% 0%, #eef2ff 0%, rgba(238,242,255,0) 60%),
+    var(--bg);
+  color:var(--text);
+}
+/* ====== Better Arabic Font (Title) ====== */
+/* اختاري واحد من الموجودين في ويندوز غالبًا */
+.results-header,
+/* خط الهيدر */
+.results-header,
+.results-header *{
+  font-family: "Tajawal", system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+
+/* ================= HEADER (Final Clean Version) ================= */
+
+.results-header{
+  width:100%;
+  background:#ffffff;
+  padding:14px 32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e5e7eb;
+  direction: rtl;
+}
+
+/* ===== يمين (اللوقو + العنوان) ===== */
+.results-header__right{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.results-header__logo img{
+  height:50px;
+  width:auto;
+  display:block;
+}
+
+.results-header__text{
+  display:flex;
+  flex-direction:column;
+  text-align:right;
+}
+
+.results-header__title{
+  font-size:22px;
+  font-weight:800;
+  color:#0f172a;
+  line-height:1.2;
+}
+
+.results-header__sub{
+  font-size:14px;
+  color:#6b7280;
+  margin-top:4px;
+}
+
+/* ===== يسار (زر الرجوع) ===== */
+.results-header__left{
+  display:flex;
+  align-items:center;
+}
+
+.back-link{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:#374151;
+  font-size:17px;
+  font-weight:700;
+  transition:0.2s ease;
+}
+
+.back-link:hover{
+  opacity:0.7;
+}
+
+.back-link__icon{
+  font-size:20px;
+}
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+.page{
+  min-height:100vh;
+}
+
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  padding: 14px 16px 28px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.topbar{
+  max-width:1100px;
+  margin:0 auto;
+  padding: 18px 16px 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.crumbs{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.crumbs__sep{
+  opacity:.7;
+}
+
+.crumbs__current{
+  color:#374151;
+  font-weight:800;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand__text{
+  text-align:left;
+  line-height:1.1;
+}
+
+.brand__title{
+  font-weight:900;
+  color:#111827;
+}
+
+.brand__sub{
+  margin-top:4px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.brand__mark{
+  width:36px;
+  height:36px;
+  border-radius:12px;
+  background:#111827;
+}
+/* ====== MAIN SUMMARY CARD (المستطيل العلوي) ====== */
+.main-summary-card{
+  width:100%;
+  max-width:1060px;
+  margin: 30px auto;
+  padding: 28px 28px;
+  background:#fff;
+  border-radius:28px;
+  box-shadow:0 14px 34px rgba(0,0,0,.08);
+  direction: rtl;
+
+  display:grid;
+  grid-template-columns: 1fr 520px; /* يسار: مربعات | يمين: النتيجة */
+  gap:28px;
+  align-items:center;
+}
+
+/* ====== RIGHT SIDE (نتيجة التحقق) ====== */
+.main-summary-card .resultMain{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:22px;
+}
+.main-summary-card .titleCheckIcon{
+  width:38px;
+  height:38px;
+  border-radius:999px;
+  background:#dff7ea;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex: 0 0 auto;
+}
+
+.main-summary-card .titleCheckIcon img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  display:block;
+}
+.main-summary-card .resultContent{
+  text-align:right;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.main-summary-card .small_resultText{
+  font-size:14px;
+  color:#6b7280;
+  font-weight:600;
+}
+
+.main-summary-card .title_resultMsg{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-size:42px;
+  font-weight:800;
+}
+
+.main-summary-card .titleCheckBox{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+
+.main-summary-card .titleCheckBox--ok{
+  background:#dff7ea;
+}
+
+.main-summary-card .titleCheckBox--error{
+  background:#fdecec;
+}
+
+.main-summary-card .titleCheckBox img{
+  width:24px;
+  height:24px;
+  object-fit:contain;
+}
+
+.titleText--ok,
+.sub_resultMsg--ok{
+  color:#27AE60;
+}
+
+.titleText--error,
+.sub_resultMsg--error{
+  color:#D9534F;
+}
+
+.main-summary-card .resultCheckBox img{
+  width:64px;
+  height:64px;
+  object-fit:contain;
+  display:block;
+}
+
+/* أزرار تحميل/مشاركة */
+.main-summary-card .resultActions{
+  display:flex;
+  gap:14px;
+  justify-content:flex-start; /* يطلعوا قدام بعض تحت */
+  margin-top:12px;
+}
+
+.main-summary-card .btn{
+  border-radius:14px;
+  padding:14px 18px;
+  font-weight:700;
+  border:2px solid #e5e7eb;
+  background:#fff;
+  cursor:pointer;
+}
+
+.main-summary-card .btn--primary{
+  background:#7A7095;
+  border-color:#7A7095;
+  color:#fff;
+  min-width:180px;
+}
+
+.main-summary-card .btn--ghost{
+  min-width:150px;
+}
+
+/* ====== LEFT SIDE (مربعات الإحصائيات 2×2) ====== */
+.main-summary-card .statsGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+}
+
+/* شكل كل مربع */
+.main-summary-card .stat{
+  border-radius:18px;
+  padding:18px 18px 14px;
+  border:2px solid #e5e7eb;
+  background:#fff;
+  min-height:110px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+/* رأس المربع: أيقونة + عنوان */
+.main-summary-card .stat__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.main-summary-card .stat__label{
+  font-weight:800;
+  font-size:18px;
+  color:#111827;
+}
+
+.main-summary-card .stat__value{
+  font-weight:900;
+  font-size:34px;
+  line-height:1;
+}
+
+/* ألوان الحالات مثل الصورة */
+.main-summary-card .stat--ok{
+  background:#eaf9f0;
+  border-color:#b7efd0;
+}
+.main-summary-card .stat--bad{
+  background:#fdecec;
+  border-color:#f5b4b4;
+}
+.main-summary-card .stat--miss,
+.main-summary-card .stat--warn{
+  background:#fff6e8;
+  border-color:#f3d2a8;
+}
+.main-summary-card .stat--ok .stat__value{ color:#0f7a54; }
+.main-summary-card .stat--bad .stat__value{ color:#b42318; }
+.main-summary-card .stat--miss .stat__value,
+.main-summary-card .stat--warn .stat__value{ color:#b45309; }
+
+.summaryCard__right_section{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.summaryCard__left_section{
+  padding-left: 10px;
+}
+.resultMain {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.resultContent {
+  text-align: right;
+}
+
+/* 2) ترتيب المربعات */
+.main-summary-card .statsGrid{ display:grid; }
+
+.main-summary-card .stat--ok   { order: 1; } /* صحيح */
+.main-summary-card .stat--bad  { order: 2; } /* خطأ */
+.main-summary-card .stat--miss { order: 3; } /* ناقص */
+.main-summary-card .stat--warn { order: 4; } /* زائد */
+
+
+.stat {
+  padding: 15px;
+  border-radius: 18px;
+  border: 1.5px solid rgba(0,0,0,0.05);
+}
+
+.stat__head {
+  display: flex;
+  justify-content: space-between; /* النص يمين والأيقونة يسار داخل المربع */
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.stat__value {
+  font-size: 28px;
+  font-weight: 900;
+  text-align: right;
+}
+
+/* التجاوب مع الجوال */
+@media (max-width: 900px) {
+  .summaryCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .summaryCard__left_section {
+    flex: none;
+    width: 100%;
+  }
+}
+.btn{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:16px 28px;
+  border-radius:20px;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s ease;
+}
+
+.btn svg{
+  width:22px;
+  height:22px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+}
+
+.btn--primary{
+  background:#8b7ca7;
+  color:#fff;
+  border:none;
+}
+
+.btn--primary:hover{
+  opacity:.9;
+}
+
+.btn--ghost{
+  background:#ffffff;
+  border:2px solid #cbd5e1;
+  color:#374151;
+}
+
+
+/* بطاقة */
+.stat{
+  border:2px solid transparent;
+  border-radius: 22px;
+  padding: 18px 18px 14px;
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+  min-height: 120px;
+}
+
+/* زخرفة خلفية */
+.stat::after{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  border-radius: 60px;
+  top:-70px;
+  left:-70px;
+  background: rgba(0,0,0,.04);
+}
+
+/* رأس البطاقة */
+.stat__head{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  color:#111827;
+  font-weight:800;
+  font-size: 18px;
+}
+
+/* أيقونة دائرة */
+.stat__icon{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 18px;
+  font-weight: 900;
+  background:#fff;
+  border:2px solid currentColor;
+}
+
+/* الرقم */
+.stat__value{
+  position:relative;
+  z-index:1;
+  margin-top: 10px;
+  font-size: 34px;
+  font-weight: 950;
+  text-align:right;
+}
+
+/* ألوان الحالات */
+.stat--ok{
+  background: #eefbf2;
+  border-color: rgba(34,197,94,.28);
+}
+.stat--ok .stat__icon{ color:#16a34a; }
+.stat--ok .stat__value{ color:#0b7a5b; }
+
+.stat--bad{
+  background: #fdeff0;
+  border-color: rgba(239,68,68,.28);
+}
+.stat--bad .stat__icon{ color:#ef4444; }
+.stat--bad .stat__value{ color:#b91c1c; }
+
+.stat--warn{
+  background: #fff6e8;
+  border-color: rgba(245,158,11,.28);
+}
+.stat--warn .stat__icon{ color:#f59e0b; }
+.stat--warn .stat__value{ color:#b45309; }
+
+.stat--miss{
+  background: #fff6e8;
+  border-color: rgba(251,146,60,.28);
+}
+.stat--miss .stat__icon{ color:#fb923c; }
+.stat--miss .stat__value{ color:#c2410c; }
+.btn{
+  border:1px solid var(--border);
+  background:#fff;
+  padding:9px 12px;
+  border-radius:12px;
+  font-size:12.5px;
+  font-weight:900;
+  color:#374151;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  transition: .15s ease;
+  user-select:none;
+}
+
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(16,24,40,.10);
+}
+
+.btn--primary{
+  background:var(--purple);
+  border-color: rgba(124,58,237,.25);
+  color:#fff;
+}
+
+.btn__icon{
+  width:16px;
+  height:16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.btn__icon svg{
+  width:16px;
+  height:16px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.1;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.filters{
+  margin-top:14px;
+  padding:14px 16px;
+}
+
+.filters__row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.filters__title{
+  font-size:13px;
+  font-weight:950;
+  color:#374151;
+}
+
+.chips{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.chip{
+  border:1px solid var(--border);
+  background:#fff;
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  color:#374151;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.chip__count{
+  padding:2px 8px;
+  border-radius:999px;
+  background:#f3f4f6;
+  font-weight:950;
+}
+
+.chip--active{
+  background:var(--purple);
+  border-color: rgba(124,58,237,.25);
+  color:#fff;
+}
+
+.chip--active .chip__count{
+  background: rgba(255,255,255,.18);
+  color:#fff;
+}
+
+.details{
+  margin-top:14px;
+  overflow:hidden;
+}
+
+.details__head{
+  padding:14px 16px 10px;
+}
+
+.details__title{
+  font-size:13px;
+  font-weight:950;
+  margin-bottom:4px;
+}
+
+.details__sub{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.tableWrap{
+  width:100%;
+  overflow:auto;
+  border-top:1px solid var(--border);
+}
+
+.table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:12.5px;
+  min-width: 860px;
+}
+
+.th{
+  background:#f9fafb;
+  padding:10px 14px;
+  text-align:right;
+  color:#374151;
+  font-weight:950;
+  border-bottom:1px solid var(--border);
+}
+
+.td{
+  background:#fff;
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  color:#111827;
+}
+
+.tr:hover .td{
+  background:#fbfbff;
+}
+
+.th--ayah,
+.td--ayah{
+  width:70px;
+  text-align:center;
+  font-weight:950;
+  color:#374151;
+}
+
+.th--word,
+.td--word{
+  width:220px;
+}
+
+.th--status,
+.td--status{
+  width:140px;
+}
+
+.th--time,
+.td--time{
+  width:140px;
+}
+
+.th--notes,
+.td--notes{
+  width:140px;
+}
+
+.wordPill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(34,197,94,.25);
+  background:var(--ok-50);
+  color:#166534;
+  font-weight:950;
+}
+
+.wordPill__tick{
+  width:14px;
+  height:14px;
+  border-radius:999px;
+  background:var(--ok);
+  position:relative;
+  flex:0 0 auto;
+}
+
+.wordPill__tick::after{
+  content:"";
+  position:absolute;
+  left:4px;
+  top:2px;
+  width:4px;
+  height:7px;
+  border:2px solid #fff;
+  border-top:none;
+  border-left:none;
+  transform: rotate(45deg);
+}
+
+.statusBadge{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:950;
+  border:1px solid var(--border);
+  background:#f9fafb;
+  color:#374151;
+}
+
+.statusBadge--ok{
+  border-color: rgba(34,197,94,.25);
+  background:var(--ok-50);
+  color:#166534;
+}
+
+.timeCell{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-variant-numeric: tabular-nums;
+  color:#374151;
+}
+
+.timeCell__icon svg{
+  width:16px;
+  height:16px;
+  fill:none;
+  stroke:#6b7280;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.noteOk{
+  color:#10b981;
+  font-weight:900;
+}
+
+.player{
+  margin-top:14px;
+  background:var(--player);
+  border-radius:18px;
+  padding:18px;
+  color:var(--playerText);
+  box-shadow: var(--shadow);
+}
+
+.player__top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.player__title{
+  font-weight:950;
+  font-size:14px;
+}
+
+.player__sub{
+  margin-top:4px;
+  font-size:12px;
+  opacity:.85;
+}
+
+.player__buttons{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.pbtn{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.14);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.pbtn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.20);
+}
+
+.pbtn svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:var(--playerText);
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.progress{
+  height:8px;
+  border-radius:999px;
+  background: rgba(255,255,255,.18);
+  overflow:hidden;
+}
+
+.progress__fill{
+  display:block;
+  height:100%;
+  width:68%;
+  background: rgba(255,255,255,.55);
+  border-radius:999px;
+}
+
+.player__time{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  opacity:.9;
+  font-variant-numeric: tabular-nums;
+}
+.resultActions .btn{
+    display:flex;
+  flex-direction:row-reverse; /* ✅ الأيقونة تصير قبل النص في RTL */
+  align-items:center;
+  gap:10px;
+  justify-content:center;
+}
+
+
+.btn__icon{
+  display:inline-block;
+}
+/* الكلمة تكون سادة بدون خلفية */
+.wordPill{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* نخليها بس صف واحد (الأيقونة + النص) */
+.wordPill{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* لو الـ tick كان مسوي دائرة/خلفية */
+.wordPill__tick{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* لو tick مرسوم بـ :before أو :after */
+.wordPill__tick::before,
+.wordPill__tick::after{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+/* تحريف */
+tr[data-type="wrong"] .statusBadge{
+  background:#FFF1F1;
+  color:#D9534F;
+  border:1px solid #F3B4B4;
+}
+
+/* زائد */
+tr[data-type="extra"] .statusBadge{
+  background:#FFF4E6;
+  color:#E67E22;
+  border:1px solid #F3C59E;
+}
+
+/* ناقص */
+tr[data-type="missing"] .statusBadge{
+  background:#FFF8DB;
+  color:#B7791F;
+  border:1px solid #F2C94C;
+}
+
+/* صحيح */
+tr[data-type="ok"] .statusBadge{
+  background:#E9F9EF;
+  color:#1A7F37;
+  border:1px solid #B7E7C7;
+}
+/* ===== إصلاح Share Menu ===== */
+.resultActions {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.share-wrapper {
+  position: relative;
+}
+
+.share-menu {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px); /* يطلع للأعلى عشان ما يغطي المربعات */
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  z-index: 999;
+  min-width: 185px;
+  overflow: hidden;
+  direction: rtl;
+}
+
+.share-menu.open {
+  display: block;
+}
+
+.share-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: right;
+  font-family: inherit;
+}
+
+.share-item:hover { background: #f9fafb; }
+.share-item--whatsapp { color: #16a34a; }
+.share-item--twitter  { color: #1d9bf0; }
+
+.share-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1f2937;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.share-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.share-item--email { color: #6b7280; }
+
+/* توسيط محتوى الملاحظات */
+.td--notes span {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* الصحيح */
+.td--notes .noteOk {
+  color: #10b981 !important;
+  font-weight: 900;
+}
+
+/* التحريف والزائد */
+.td--notes .noteBad {
+  color: #dc2626 !important;
+  font-weight: 800;
+}
+
+/* الناقص فقط باللون الأصفر */
+tr[data-type="missing"] .td--notes .noteBad {
+  color: #b7791f !important;
+  font-weight: 800;
+}
+/* يخلي العمود كله بالنص */
+/* خلي الملاحظات على اليمين */
+.td--notes {
+  text-align: left !important;
+}
+
+/* ترتيب الأيقونة مع النص */
+.td--notes span {
+  display: flex !important;
+  justify-content: flex-right !important; /* يمين */
+  align-items: center;
+  gap: 6px;
+}
+
+/* الجزء الخطأ (قُرئت) */
+.wrong-part {
+  color: #dc2626; /* أحمر */
+  font-weight: 800;
+}
+
+/* الجزء الصحيح (الصواب) */
+.correct-part {
+  color: #16a34a; /* أخضر */
+  font-weight: 800;
+}
+.note{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:transparent !important;
+  border:none !important;
+  padding:0 !important;
+  font-size:13px;
+  font-weight:700;
+}
+
+.note img{
+  width:14px;
+  height:14px;
+}
+
+/* الكلمة الناقصة فقط داخل مربع صغير */
+.note-word-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:42px;
+  padding:5px 12px;
+  border-radius:10px;
+  background:#fff8db;
+  border:1px solid #f2c94c;
+  color:#b7791f;
+  font-weight:800;
+}
+
+/* النص العادي بدون خلفية */
+.note-label--missing{
+  color:#b7791f;
+  font-weight:800;
+}
+/* =========================================================
+   تعديل عرض تفاصيل الكلمات - تيقّن
+   المطلوب:
+   - الكلمة نفسها تكون داخل خلفية حسب الحالة.
+   - الصحيح: أخضر + أيقونة check-green.
+   - الناقص: يظهر --- بالأصفر + أيقونة wrong.
+   - الزائد: برتقالي + أيقونة wrong.
+   - التحريف: أحمر + أيقونة wrong.
+   - الملاحظات بدون خلفيات، فقط نص ملون مع علامة مناسبة.
+   ========================================================= */
+
+.td--word {
+  text-align: right !important;
+}
+
+.wordPill,
+.wordPill[style] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  min-width: 72px !important;
+  padding: 7px 12px !important;
+  border-radius: 12px !important;
+  border: 1.5px solid transparent !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  background: #f9fafb !important;
+  color: #374151 !important;
+}
+
+.wordPill__tick,
+.wordPill__tick::before,
+.wordPill__tick::after {
+  display: none !important;
+  content: none !important;
+}
+
+.wordPill__icon {
+  width: 15px !important;
+  height: 15px !important;
+  object-fit: contain !important;
+  flex: 0 0 auto !important;
+}
+
+.wordPill--correct {
+  background: #ecfdf5 !important;
+  border-color: #bbf7d0 !important;
+  color: #047857 !important;
+}
+
+.wordPill--missing {
+  background: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #b7791f !important;
+}
+
+.wordPill--extra {
+  background: #fff7ed !important;
+  border-color: #fed7aa !important;
+  color: #c2410c !important;
+}
+
+.wordPill--wrong {
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #dc2626 !important;
+}
+
+.statusBadge--ok,
+tr[data-type="correct"] .statusBadge {
+  background: #ecfdf5 !important;
+  border-color: #bbf7d0 !important;
+  color: #047857 !important;
+}
+
+.statusBadge--miss,
+tr[data-type="missing"] .statusBadge {
+  background: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #b7791f !important;
+}
+
+.statusBadge--warn,
+tr[data-type="extra"] .statusBadge {
+  background: #fff7ed !important;
+  border-color: #fed7aa !important;
+  color: #c2410c !important;
+}
+
+.statusBadge--bad,
+tr[data-type="wrong"] .statusBadge {
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #dc2626 !important;
+}
+
+.td--notes {
+  width: 260px !important;
+  text-align: right !important;
+}
+
+.noteBox {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+.note,
+.td--notes .note,
+.td--notes span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.7 !important;
+  white-space: normal !important;
+  flex-wrap: wrap !important;
+  text-align: right !important;
+}
+
+.note img {
+  display: none !important;
+}
+
+.note__check {
+  width: 16px !important;
+  height: 16px !important;
+  border: 1.8px solid currentColor !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.note__mark {
+  width: 15px !important;
+  height: 15px !important;
+  border: 1.8px solid currentColor !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+.note--ok {
+  color: #10b981 !important;
+}
+
+.note--missing,
+.note-label--missing,
+.note-word--missing {
+  color: #b7791f !important;
+}
+
+.note--extra,
+.note-word--extra {
+  color: #c2410c !important;
+}
+
+.note--wrong,
+.wrong-part {
+  color: #dc2626 !important;
+}
+
+.correct-part {
+  color: #059669 !important;
+  font-weight: 900 !important;
+}
+.note img {
+  display: inline-block !important;
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  vertical-align: middle;
+}

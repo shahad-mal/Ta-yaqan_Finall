@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}تيقّن | من نحن{% endblock %}
+
+{% block head %}
+  <!-- CSS خاص بالـ About فقط -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  
+  <main class="about-page">
+
+    <!-- HERO -->
+    <header class="about-hero">
+      <div class="about-container about-hero__inner">
+        <h1 class="about-hero__title">من نحن</h1>
+        <p class="about-hero__desc">
+          تيقّن هو نظام ويب متطور يستخدم تقنيات الذكاء الاصطناعي المتقدمة للتحقق من صحة وكمال تلاوات القرآن الكريم،
+          وضمان سلامة النص القرآني من أي تحريف أو تغيير في التلاوات الرقمية.
+        </p>
+      </div>
+    </header>
+
+    <!-- MISSION + WHY -->
+    <section class="about-section">
+      <div class="about-container about-grid2">
+
+        <!-- Mission -->
+        <article class="about-mission">
+          <div class="about-mission__icon">
+            <img class="about-icon"
+                 src="{{ url_for('static', filename='img/target.png') }}"
+                 alt="Target">
+          </div>
+
+          <h2 class="about-mission__title">رسالتنا</h2>
+          <p class="about-mission__text">
+            نسعى لتوفير أداة تقنية موثوقة وسهلة الاستخدام للتحقق من سلامة النص القرآني وصحة التلاوات،
+            مع الحفاظ على الدقة العالية في اكتشاف الأخطاء وتقديم تقارير تفصيلية شاملة.
+          </p>
+
+          <ul class="about-mission__list">
+            <li>
+              <span class="about-check">
+                <img class="about-icon about-icon--sm"
+                     src="{{ url_for('static', filename='img/check.png') }}"
+                     alt="Check">
+              </span>
+              حماية النص القرآني من التحريف في العصر الرقمي
+            </li>
+            <li>
+              <span class="about-check">
+                <img class="about-icon about-icon--sm"
+                     src="{{ url_for('static', filename='img/check.png') }}"
+                     alt="Check">
+              </span>
+              اكتشاف الأخطاء والحذف والإضافة بدقة عالية
+            </li>
+            <li>
+              <span class="about-check">
+                <img class="about-icon about-icon--sm"
+                     src="{{ url_for('static', filename='img/check.png') }}"
+                     alt="Check">
+              </span>
+              تعزيز الثقة بالتلاوات القرآنية الرقمية
+            </li>
+          </ul>
+        </article>
+
+        <!-- Why -->
+        <div class="about-why">
+          <h2 class="about-why__title">لماذا تيقّن؟</h2>
+          <p class="about-why__text">
+            مع انتشار التلاوات القرآنية عبر المنصات الرقمية وظهور تقنيات الذكاء الاصطناعي التي قد تُنتج محتوى غير موثوق،
+            ازدادت الحاجة لأداة تضمن سلامة كلام الله من أي تحريف أو تغيير غير مقصود.
+            تيقّن يوفر حلاً تقنياً متطوراً يكتشف الحذف والإضافة والأخطاء ويعزز الثقة بالمحتوى القرآني الرقمي.
+          </p>
+
+          <div class="about-why__cards">
+            <div class="about-mini about-mini--1">
+              <h3>حماية النص القرآني</h3>
+              <p>ضمان عدم تحريف أو تغيير كلام الله في التلاوات الرقمية</p>
+            </div>
+            <div class="about-mini about-mini--2">
+              <h3>دقة عالية</h3>
+              <p>اكتشاف الحذف والإضافة والأخطاء بدقة عالية</p>
+            </div>
+            <div class="about-mini about-mini--3">
+              <h3>موثوقية المحتوى</h3>
+              <p>تعزيز الثقة بالتلاوات القرآنية عبر المنصات الرقمية</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="about-section about-section--soft">
+      <div class="about-container">
+        <div class="about-head">
+          <h2 class="about-head__title">مميزاتنا</h2>
+          <p class="about-head__sub">ما يجعل تيقّن الخيار الأمثل لك</p>
+        </div>
+
+        <div class="about-grid3">
+          <article class="about-feature">
+            <div class="about-feature__icon" style="--bg:#8E83A9;">
+              <img class="about-icon" src="{{ url_for('static', filename='img/zap.png') }}" alt="Zap">
+            </div>
+            <h3 class="about-feature__title">تقنية متطورة</h3>
+            <p class="about-feature__text">
+              نستخدم أحدث تقنيات الذكاء الاصطناعي ومعالجة اللغة الطبيعية للتحقق من التلاوات بدقة عالية
+            </p>
+          </article>
+
+          <article class="about-feature">
+            <div class="about-feature__icon" style="--bg:#7A7095;">
+              <img class="about-icon" src="{{ url_for('static', filename='img/clock.png') }}" alt="Clock">
+            </div>
+            <h3 class="about-feature__title">سرعة في المعالجة</h3>
+            <p class="about-feature__text">
+              معالجة سريعة للتلاوات مع تقديم نتائج فورية وتقارير تفصيلية شاملة
+            </p>
+          </article>
+
+          <article class="about-feature">
+            <div class="about-feature__icon" style="--bg:#B4A9CC;">
+              <img class="about-icon" src="{{ url_for('static', filename='img/users.png') }}" alt="Users">
+            </div>
+            <h3 class="about-feature__title">سهولة الاستخدام</h3>
+            <p class="about-feature__text">
+              واجهة بسيطة وسهلة الاستخدام تناسب جميع الفئات العمرية والمستويات التقنية
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNOLOGY -->
+    <section class="about-section">
+      <div class="about-container">
+        <div class="about-head">
+          <h2 class="about-head__title">التقنية المستخدمة</h2>
+          <p class="about-head__sub">
+            نستخدم أحدث تقنيات الذكاء الاصطناعي ومعالجة اللغة الطبيعية لتوفير أعلى مستويات الدقة
+          </p>
+        </div>
+
+        <div class="about-grid3">
+          <article class="about-tech">
+            <div class="about-tech__icon about-tech__icon--1">
+              <img class="about-icon" src="{{ url_for('static', filename='img/ai.png') }}" alt="AI">
+            </div>
+            <h3 class="about-tech__title">الذكاء الاصطناعي</h3>
+            <p class="about-tech__text">خوارزميات متطورة لتحليل التلاوات بدقة عالية</p>
+          </article>
+
+          <article class="about-tech">
+            <div class="about-tech__icon about-tech__icon--2">
+              <img class="about-icon" src="{{ url_for('static', filename='img/audio.png') }}" alt="Audio">
+            </div>
+            <h3 class="about-tech__title">معالجة الصوت</h3>
+            <p class="about-tech__text">تقنيات متقدمة لتحليل الصوت واستخراج النص</p>
+          </article>
+
+          <article class="about-tech">
+            <div class="about-tech__icon about-tech__icon--3">
+              <img class="about-icon" src="{{ url_for('static', filename='img/data.png') }}" alt="Data">
+            </div>
+            <h3 class="about-tech__title">تحليل البيانات</h3>
+            <p class="about-tech__text">إحصائيات وتقارير تفصيلية لمتابعة التقدم</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="about-cta">
+      <div class="about-container about-cta__inner">
+        <h2 class="about-cta__title">ابدأ رحلتك مع تيقّن اليوم</h2>
+        <p class="about-cta__text">
+          انضم إلى المستخدمين الذين يستخدمون تيقّن للتحقق من صحة تلاوة القرآن الكريم
+        </p>
+
+        <div class="about-cta__actions">
+         <a class="about-btn about-btn--light"
+   href="{{ url_for('main.upload') if session.get('user_id') else url_for('auth.login') }}">
+   ابدأ الآن
+</a>
+          <a class="about-btn about-btn--ghost" href="{{ url_for('main.contact') }}">تواصل معنا</a>
+        </div>
+      </div>
+    </section> 
+
+  </main>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+<style>
+.footer{
+  background:#0f172a;
+  color:#fff;
+  padding:50px 0 0;
+}
+.footer__inner{
+  max-width:1120px;
+  margin:0 auto;
+  padding:0 16px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:32px;
+}
+.footer__logo{
+  height:48px;
+  width:auto;
+  filter: brightness(0) invert(1); /* يخليه أبيض */
+  margin-bottom:12px;
+}
+.footer__link{
+  text-decoration:none;
+  color:rgba(148,163,184,.95);
+}
+.footer__link:hover{
+  color:var(--tayaqan-accent);
+}
+.footer__bottom{
+  border-top:1px solid rgba(30,41,59,.9);
+  text-align:center;
+  padding:20px 0;
+  margin-top:30px;
+  font-size:14px;
+  color:rgba(148,163,184,.95);
+}
+</style>
+
+<footer class="footer">
+  <div class="footer__inner">
+<style>
+.footer-logo{
+  height: 95px;   /* كبّري الرقم حسب ما تبغين */
+  width: auto;
+  display: block;
+  filter: brightness(0) invert(1); /* يخليه أبيض */
+}
+</style>
+
+    <div>
+      <img src="{{ url_for('static', filename='img/logo.png') }}"
+     alt="Ta'yaqan Logo"
+     class="footer-logo">
+      <p>نظام ذكي للتحقق من صحة وكمال التلاوات القرآنية.</p>
+    </div>
+
+    <div>
+      <h4>روابط سريعة</h4>
+      <a href="/" class="footer__link">الرئيسية</a><br>
+      <a href="/about" class="footer__link">من نحن</a><br>
+      <a href="/contact" class="footer__link">تواصل معنا</a>
+    </div>
+
+    <div>
+      <h4>تواصل معنا</h4>
+      <p>info@tayaqan.com</p>
+    </div>
+
+  </div>
+
+  <div class="footer__bottom">
+    © 2025 تيقّن - Ta'yaqan
+  </div>
+</footer>

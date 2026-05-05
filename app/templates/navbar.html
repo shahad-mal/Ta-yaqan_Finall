@@ -1,0 +1,51 @@
+<nav class="navbar">
+  <div class="navbar__row">
+
+    <!-- ✅ يمين: اللوقو -->
+    <a class="navbar__brand"
+       href="{{ url_for('main.upload') if session.get('user_id') else url_for('main.home') }}">
+      <img src="{{ url_for('static', filename='img/logo.png') }}"
+           alt="Ta'yaqan Logo"
+           class="nav-logo">
+           {% if session.get('user_id') %}
+    <span class="dashboard-label">لوحة التحكم</span>
+  {% endif %}
+    </a>
+
+    <!-- ✅ يسار: روابط + زر -->
+    <div class="navbar__left">
+
+      <div class="navbar__links">
+        <!-- ✅ الرئيسية تتغير حسب تسجيل الدخول -->
+        <a href="{{ url_for('main.upload') if session.get('user_id') else url_for('main.home') }}"
+           class="navbar__link {% if request.path == '/' or request.path.startswith('/upload') %}is-active{% endif %}">
+          الرئيسية
+        </a>
+
+        <a href="{{ url_for('main.about') }}"
+           class="navbar__link {% if request.path.startswith('/about') %}is-active{% endif %}">
+          من نحن
+        </a>
+
+        <a href="{{ url_for('main.contact') }}"
+           class="navbar__link {% if request.path.startswith('/contact') %}is-active{% endif %}">
+          تواصل معنا
+        </a>
+      </div>
+<!-- ✅ زر تسجيل الدخول + تسجيل الخروج مع أيقونة -->
+{% if session.get('user_id') %}
+  <a href="{{ url_for('auth.logout') }}" class="navbar__logout">
+    <img src="{{ url_for('static', filename='img/icon-logout.png') }}" 
+         alt="logout" 
+         class="logout-icon">
+    تسجيل الخروج
+  </a>
+{% else %}
+  <a href="{{ url_for('auth.login') }}" class="navbar__btn">
+    تسجيل الدخول
+  </a>
+{% endif %}
+
+    </div>
+  </div>
+</nav>

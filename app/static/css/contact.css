@@ -1,0 +1,298 @@
+/* contact.css (scoped) */
+.contact-page *{ box-sizing:border-box; }
+
+.contact-page{
+  /* لا نلمس body ولا نغير الخط العام */
+  color:#2d2d2d;
+}
+
+/* بدل body نخليها داخل صفحة الكونتاكت */
+.contact-page{
+  margin:0;
+}
+
+/* متغيرات خاصة بالكونتاكت */
+.contact-page{
+  --purple:#8E83A9;
+  --purple-dark:#7A7095;
+  --bg:#f6f3f7;
+  --card:#ffffff;
+  --border: rgba(0,0,0,.06);
+  --shadow: 0 10px 28px rgba(20, 20, 30, 0.10);
+}
+
+.contact-page.page-bg{
+  background: radial-gradient(circle at 30% 20%, #f7f2f5 0%, #f3eef2 35%, #f6f4f6 70%, #f4f1f4 100%);
+}
+
+/* HERO */
+.contact-page .hero{
+  background: var(--purple);
+  text-align:center;
+  padding: 44px 16px;
+}
+.contact-page .hero__title{
+  margin: 0 0 10px;
+  color:#fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+.contact-page .hero__sub{
+  margin:0;
+  color: rgba(255,255,255,.85);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* layout */
+.contact-page .container{
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+/* info cards فوق */
+.contact-page .info-grid{
+  direction: ltr;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 12px;
+  margin-bottom: 22px;
+}
+.contact-page .info-grid > *{ direction: rtl; }
+
+.contact-page .info-card{
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(180, 170, 190, 0.25);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 24px 18px;
+  text-align:center;
+  backdrop-filter: blur(8px);
+}
+.contact-page .info-icon{
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--purple);
+  display:grid;
+  place-items:center;
+  margin: 0 auto 10px;
+  box-shadow: 0 10px 20px rgba(142,131,169,.22);
+}
+.contact-page .info-icon img{
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+.contact-page .info-title{
+  color:#6e647a;
+  font-weight:700;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.contact-page .info-value{
+  color:#2d2d2d;
+  font-size: 13px;
+}
+
+/* عنوان منتصف الصفحة */
+.contact-page .mid-title{
+  text-align:center;
+  color:#7a6f86;
+  font-weight:700;
+  margin: 8px 0 18px;
+}
+
+/* main grid */
+.contact-page .grid{
+  direction: ltr;
+  display:grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 22px;
+  align-items:start;
+}
+.contact-page .grid > *{ direction: rtl; }
+
+/* FAQ cards */
+.contact-page .faq-card{
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(180, 170, 190, 0.25);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  backdrop-filter: blur(8px);
+  margin-bottom: 16px;
+}
+.contact-page .faq-q{
+  display:flex;
+  align-items:flex-start;
+  gap: 8px;
+  font-weight:700;
+  color:#5e546a;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.contact-page .dot{ color: var(--purple); }
+.contact-page .faq-a{
+  margin:0;
+  line-height:1.9;
+  color:#5a5a5a;
+  font-size: 13px;
+}
+
+/* Help card */
+.contact-page .help-card{
+  background: rgba(240, 235, 244, 0.85);
+  border: 1px solid rgba(180, 170, 190, 0.25);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+}
+.contact-page .help-title{
+  margin:0 0 8px;
+  text-align:center;
+  color:#6e647a;
+  font-size: 14px;
+}
+.contact-page .help-text{
+  margin:0;
+  text-align:center;
+  color:#5a5a5a;
+  font-size: 13px;
+  line-height:1.8;
+}
+.contact-page .help-actions{
+  display:flex;
+  gap: 10px;
+  justify-content:center;
+  margin-top: 14px;
+}
+.contact-page .help-btn{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  text-decoration:none;
+  font-weight:700;
+  font-size: 13px;
+  border: 1px solid transparent;
+}
+.contact-page .help-btn .btn-ico{
+  width: 22px;
+  height: 22px;
+  object-fit:contain;
+}
+.contact-page .help-btn.outline{
+  background:#fff;
+  border-color: var(--purple);
+  color: var(--purple);
+}
+.contact-page .help-btn.solid{
+  background: var(--purple);
+  color:#fff;
+}
+.contact-page .help-btn.solid .btn-ico{
+  filter: brightness(0) invert(1);
+}
+
+/* Form header */
+.contact-page .form-head{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  color:#6e647a;
+}
+.contact-page .form-head__icon{
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: var(--purple);
+  display:grid;
+  place-items:center;
+  box-shadow: 0 10px 20px rgba(142,131,169,.22);
+}
+.contact-page .form-head__icon img{
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+.contact-page .form-head__title{
+  margin:0;
+  font-size: 16px;
+  font-weight: 800;
+  color:#6e647a;
+}
+
+/* Form card */
+.contact-page .form-card{
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(180, 170, 190, 0.25);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  backdrop-filter: blur(8px);
+}
+
+.contact-page .lbl{
+  display:block;
+  margin: 10px 0 8px;
+  color:#6a6175;
+  font-weight:600;
+  font-size: 13px;
+}
+.contact-page .in,
+.contact-page .ta{
+  width:100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(150,140,165,0.35);
+  outline:none;
+  background: rgba(255,255,255,0.92);
+  font-size: 13px;
+}
+.contact-page .ta{ resize: vertical; }
+
+.contact-page .send-btn{
+  width:100%;
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 0;
+  cursor:pointer;
+  background: var(--purple);
+  color:#fff;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+  box-shadow: 0 10px 20px rgba(142,131,169,.22);
+}
+.contact-page .send-btn:hover{ background: var(--purple-dark); }
+.contact-page .send-ico{
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+/* alerts */
+.contact-page .alert{
+  margin: 10px 0 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 700;
+}
+.contact-page .alert.success{ background: rgba(0, 160, 90, 0.10); color: #0a6a3d; border: 1px solid rgba(0,160,90,0.25); }
+.contact-page .alert.error{ background: rgba(200, 0, 0, 0.08); color: #8a0f0f; border: 1px solid rgba(200,0,0,0.20); }
+
+@media (max-width: 900px){
+  .contact-page .info-grid{ grid-template-columns: 1fr; }
+  .contact-page .grid{ grid-template-columns: 1fr; direction: rtl; }
+}

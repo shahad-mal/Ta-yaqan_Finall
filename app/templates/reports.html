@@ -1,0 +1,530 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | التقارير{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+<aside class="side">
+  <nav class="side__nav">
+    <a class="side__item" href="{{ url_for('main.upload') }}">
+      <span class="side__icon"><img src="{{ url_for('static', filename='img/upload1.png') }}" alt="رفع تلاوة"></span>
+      <span>رفع تلاوة</span>
+    </a>
+    <a class="side__item" href="{{ url_for('main.history') }}">
+      <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="سجل التحقق"></span>
+      <span>سجل التحقق</span>
+    </a>
+    <a class="side__item side__item--active" href="{{ url_for('main.reports') }}">
+      <span class="side__icon"><img src="{{ url_for('static', filename='img/reports.png') }}" alt="التقارير"></span>
+      <span>التقارير</span>
+    </a>
+    <a class="side__item" href="{{ url_for('main.listen') }}">
+      <span class="side__icon"><img src="{{ url_for('static', filename='img/listen.png') }}" alt="استماع للقرآن"></span>
+      <span>استماع للقرآن</span>
+    </a>
+  </nav>
+</aside>
+
+  <main class="main">
+
+    <!-- ===== هيدر الصفحة ===== -->
+    <div class="rp-header">
+      <div>
+        <h1 class="rp-header__title">تقارير التحقق الشاملة</h1>
+        <p class="rp-header__sub">إحصائيات وتحليل شامل لجميع عمليات التحقق من التلاوات</p>
+      </div>
+
+      <!-- فلتر الوقت -->
+      <div class="rp-period">
+        {% for val, label in [('week','أسبوع'),('month','شهر'),('3months','3 أشهر'),('year','عام'),('all','الكل')] %}
+        <a href="{{ url_for('main.reports', period=val) }}"
+           class="rp-period__btn {% if period == val %}rp-period__btn--active{% endif %}">
+          {{ label }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+  <div class="rp-stats">
+
+  <div class="rp-stat rp-stat--purple">
+    <img src="{{ url_for('static', filename='img/repots2.png') }}" class="rp-stat__img">
+    <div class="rp-stat__value">{{ top_surah_name }}</div>
+    <div class="rp-stat__label">السورة الأكثر تحققاً</div>
+  </div>
+
+  <div class="rp-stat rp-stat--red">
+    <img src="{{ url_for('static', filename='img/wrong2.png') }}" class="rp-stat__img">
+    <div class="rp-stat__value">{{ files_with_errors }}</div>
+    <div class="rp-stat__label">ملفات بها أخطاء</div>
+  </div>
+
+  <div class="rp-stat rp-stat--green">
+    <img src="{{ url_for('static', filename='img/check.png') }}" class="rp-stat__img">
+    <div class="rp-stat__value">{{ files_without_errors }}</div>
+    <div class="rp-stat__label">ملفات سليمة بدون أخطاء</div>
+  </div>
+
+  <div class="rp-stat rp-stat--gray">
+    <img src="{{ url_for('static', filename='img/book.png') }}" class="rp-stat__img">
+    <div class="rp-stat__value">{{ total_files }}</div>
+    <div class="rp-stat__label">إجمالي الملفات المتحقق منها</div>
+  </div>
+
+</div>
+
+    <!-- ===== تبويبات ===== -->
+    <div class="rp-tabs">
+      <button class="rp-tab rp-tab--active" data-tab="errors">تحليل الأخطاء</button>
+      <button class="rp-tab" data-tab="sources">المصادر والسور</button>
+      <button class="rp-tab" data-tab="details">التحققات المفصلة</button>
+    </div>
+
+    <!-- ===== محتوى التبويب: تحليل الأخطاء ===== -->
+    <div class="rp-tabcontent" id="tab-errors">
+
+      <!-- ملخص الأخطاء السريع -->
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div class="rp-card__title">
+  <img src="{{ url_for('static', filename='img/zep2.png') }}" style="width:25px; height:25px; object-fit:contain; vertical-align:middle; margin-left:3px;">
+  ملخص الأخطاء السريع
+</div>
+        </div>
+
+        <div class="rp-summary-grid">
+  <div class="rp-summary-box rp-summary-box--red">
+    <img src="{{ url_for('static', filename='img/wrong.png') }}" style="width:36px; height:36px; object-fit:contain;">
+    <div class="rp-summary-box__num">{{ files_with_errors }}</div>
+    <div class="rp-summary-box__label">ملف به أخطاء</div>
+    <div class="rp-summary-box__hint"> يحتاج مراجعة</div>
+  </div>
+  <div class="rp-summary-box rp-summary-box--green">
+    <img src="{{ url_for('static', filename='img/check-green.png') }}" style="width:36px; height:36px; object-fit:contain;">
+    <div class="rp-summary-box__num">{{ files_without_errors }}</div>
+    <div class="rp-summary-box__label">ملف سليم</div>
+    <div class="rp-summary-box__hint">بدون أي أخطاء </div>
+  </div>
+</div>
+
+        <div class="rp-total-bar">
+          <div class="rp-total-bar__right">
+            <span class="rp-total-bar__title">مجموع جميع الأخطاء</span>
+            <span class="rp-total-bar__num">{{ total_errors }} خطأ</span>
+          </div>
+          <div class="rp-total-bar__left">في {{ total_files }} ملف</div>
+        </div>
+
+        {% if most_common_error_ar != "—" %}
+        <div class="rp-common-error">
+          <div class="rp-common-error__right">
+            <span class="rp-common-error__icon">
+  <img src="{{ url_for('static', filename='img/idea_Icon.png') }}" 
+       class="common-icon" 
+       alt="">
+</span>
+            <span class="rp-common-error__label">الخطأ الأكثر شيوعاً:</span>
+            <span class="rp-common-error__value">{{ most_common_error_ar }}</span>
+          </div>
+          <span class="rp-common-error__count">تكرر {{ most_common_error_count }} مرة</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- توزيع أنواع الأخطاء -->
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div>
+            <div class="rp-card__title">
+  <img src="{{ url_for('static', filename='img/chart.png') }}" style="width:25px; height:25px; object-fit:contain; vertical-align:middle; margin-left:3px;">
+  توزيع أنواع الأخطاء
+</div>
+            <div class="rp-card__sub">عدد كل نوع من الأخطاء المكتشفة</div>
+          </div>
+        </div>
+
+        <div class="rp-dist">
+          <div class="rp-dist__list">
+            <div class="rp-dist__item">
+              <span class="rp-dist__dot" style="background:#ef4444;"></span>
+              <span class="rp-dist__name">نقص كلمات</span>
+              <span class="rp-dist__count">{{ missing_count }} <span class="rp-dist__err">خطأ</span></span>
+            </div>
+            <div class="rp-dist__item">
+              <span class="rp-dist__dot" style="background:#b5a08a;"></span>
+              <span class="rp-dist__name">تحريف كلمات</span>
+              <span class="rp-dist__count">{{ wrong_count }} <span class="rp-dist__err">خطأ</span></span>
+            </div>
+            <div class="rp-dist__item">
+              <span class="rp-dist__dot" style="background:#f59e0b;"></span>
+              <span class="rp-dist__name">زيادة كلمات</span>
+              <span class="rp-dist__count">{{ extra_count }} <span class="rp-dist__err">خطأ</span></span>
+            </div>
+          </div>
+          <div class="rp-dist__chart">
+            <canvas id="errorsChart" width="220" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- الأخطاء الأكثر تكراراً -->
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div>
+            <div class="rp-card__title">
+  <img src="{{ url_for('static', filename='img/wrong3.png') }}" style="width:25px; height:25px; object-fit:contain; vertical-align:middle; margin-left:3px;">
+  الأخطاء الأكثر تكراراً على مستوى النظام
+</div>
+          </div>
+        </div>
+
+        {% if top_words %}
+        <div class="rp-topwords">
+          {% for w in top_words %}
+          {% set cls = 'rp-word--red' if w.status == 'ناقص' else ('rp-word--orange' if w.status == 'زائد' else 'rp-word--yellow') %}
+          {% set badge_cls = 'rp-badge--red' if w.status == 'ناقص' else ('rp-badge--orange' if w.status == 'زائد' else 'rp-badge--yellow') %}
+          {% set label = 'نقص' if w.status == 'ناقص' else ('زائد' if w.status == 'زائد' else 'تحريف') %}
+          <div class="rp-word {{ cls }}">
+            <div class="rp-word__right">
+              <div class="rp-word__top">
+                <span class="rp-word__text">{{ w.word }}</span>
+                <span class="rp-badge {{ badge_cls }}">{{ label }}</span>
+              </div>
+              <div class="rp-word__meta">{{ w.surah }} - تكرر {{ w.count }} مرة - في {{ w.files }} ملفاً</div>
+            </div>
+            <div class="rp-word__count">{{ w.count }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align:center; color:#999; padding:30px;">لا توجد أخطاء مسجلة</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- ===== تبويب: المصادر والسور ===== -->
+    <div class="rp-tabcontent rp-tabcontent--hidden" id="tab-sources">
+
+      {% if source_real_total > 0 %}
+<div class="rp-card">
+        <div class="rp-card__head">
+          <div>
+            <div class="rp-card__title">
+              <img src="{{ url_for('static', filename='img/recent.png') }}" class="rp-section-icon" alt="">
+              توزيع مصادر التحقق
+            </div>
+            <div class="rp-card__sub">إحصائيات استخدام أنواع الملفات المختلفة في التحققات</div>
+          </div>
+        </div>
+
+        <div class="rp-sources-wrap">
+          <div class="rp-sources-chart">
+            <canvas id="sourcesChart" width="260" height="260"></canvas>
+          </div>
+          <div class="rp-sources-list">
+            {% for src in source_distribution %}
+            <div class="rp-source-item">
+              <div class="rp-source-item__top">
+                <span class="rp-source-item__name" style="display:flex; align-items:center; gap:6px;">
+
+  {% if src.type == 'ملفات صوتية' %}
+    <img src="{{ url_for('static', filename='img/audio4.png') }}" class="rp-source-type-icon" alt="">
+  
+  {% elif src.type == 'روابط يوتيوب' %}
+    <img src="{{ url_for('static', filename='img/youtube4.png') }}" class="rp-source-type-icon" alt="">
+  
+  {% else %}
+    <img src="{{ url_for('static', filename='img/video4.png') }}" class="rp-source-type-icon" alt="">
+  
+  {% endif %}
+
+  {{ src.type }}
+</span>
+                <span class="rp-source-item__count">{{ src.count }} ملف</span>
+              </div>
+              <div class="rp-source-item__bar-bg">
+                <div class="rp-source-item__bar-fill" data-pct="{{ src.pct | default(0) }}"></div>
+              </div>
+              <div class="rp-source-item__pct">{{ src.pct }}% من إجمالي التحققات</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="rp-source-note">
+          <img src="{{ url_for('static', filename='img/lamp.png') }}" class="rp-source-note__icon" alt="">
+          <div class="rp-source-note__content">
+            <div class="rp-source-note__title">ملاحظة</div>
+            <div class="rp-source-note__text">
+              المصدر الأكثر استخداماً هو: <strong>{{ top_source.type }}</strong> بنسبة {{ top_source.pct }}% من مجموع التحققات
+            </div>
+          </div>
+        </div>
+      </div>
+{% endif %}
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div>
+            <div class="rp-card__title">
+              <img src="{{ url_for('static', filename='img/recent.png') }}" class="rp-section-icon" alt="">
+              السور الأكثر تحققاً
+            </div>
+            <div class="rp-card__sub">السور التي تم التحقق منها بشكل متكرر مع إجمالي الأخطاء المكتشفة</div>
+          </div>
+        </div>
+
+        {% if top_surahs %}
+        <div class="rp-surahs-grid">
+          {% for s in top_surahs %}
+          <div class="rp-surah-card">
+            <div class="rp-surah-card__rank rp-surah-card__rank--{{ loop.index }}">{{ loop.index }}</div>
+            <div class="rp-surah-card__name">{{ s.name }}</div>
+            <div class="rp-surah-card__row">
+              <span class="rp-surah-card__lbl">عدد التحققات</span>
+              <span class="rp-surah-card__val">{{ s.verifications }}</span>
+            </div>
+            <div class="rp-surah-card__row">
+              <span class="rp-surah-card__lbl">مجموع الأخطاء</span>
+              {% if s.errors == 0 %}
+                <span class="rp-surah-card__val rp-surah-card__val--ok">0</span>
+              {% else %}
+                <span class="rp-surah-card__val rp-surah-card__val--err">{{ s.errors }}</span>
+              {% endif %}
+            </div>
+            <div class="rp-surah-card__row">
+              <span class="rp-surah-card__lbl">ملفات بها أخطاء</span>
+              {% if s.files_with_errors == 0 %}
+                <span class="rp-surah-card__val rp-surah-card__val--ok">0</span>
+              {% else %}
+                <span class="rp-surah-card__val rp-surah-card__val--err">{{ s.files_with_errors }}</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align:center;color:#999;padding:30px;">لا توجد بيانات بعد</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+     <!-- ===== تبويب: التحققات المفصلة ===== -->
+    <div class="rp-tabcontent rp-tabcontent--hidden" id="tab-details">
+
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div class="rp-card__title">
+            <img src="{{ url_for('static', filename='img/recent.png') }}" class="rp-section-icon" alt="">
+            آخر التحققات
+          </div>
+        </div>
+
+        {% if recent_verifications %}
+        <div class="rp-verif-list">
+          {% for v in recent_verifications %}
+          {% set source_type = (v.source_type or '')|lower %}
+
+          <a class="rp-verif-item" href="{{ url_for('main.results', input_id=v.inputid) }}">
+
+            <div class="rp-verif-item__top">
+              <div class="rp-verif-item__info">
+                <span class="rp-verif-item__surah">سورة {{ v.surah_name }}</span>
+                <span class="rp-verif-item__ayah">الآيات {{ v.start_ayah }}–{{ v.end_ayah }}</span>
+              </div>
+
+              <span class="rp-verif-item__badge
+                {% if v.errors == 0 %}rp-verif-item__badge--ok
+                {% elif v.errors <= 2 %}rp-verif-item__badge--warn
+                {% else %}rp-verif-item__badge--err{% endif %}">
+                {% if v.errors == 0 %}✓ سليمة{% else %}{{ v.errors }} خطأ{% endif %}
+              </span>
+            </div>
+
+            <div class="rp-verif-item__meta">
+              <span class="rp-meta-item">
+                <img src="{{ url_for('static', filename='img/calendar.png') }}" class="rp-meta-icon" alt="">
+                {{ v.date }}
+              </span>
+
+              <span class="rp-meta-item">
+                <img src="{{ url_for('static', filename='img/clock2.png') }}" class="rp-meta-icon" alt="">
+                {{ v.time }}
+              </span>
+
+              <span class="rp-meta-item">
+                {% if 'youtube' in source_type %}
+                  <img src="{{ url_for('static', filename='img/youtubeIcon.png') }}" class="rp-meta-icon" alt="">
+                  يوتيوب
+                {% elif 'video' in source_type %}
+                  <img src="{{ url_for('static', filename='img/video4.png') }}" class="rp-meta-icon" alt="">
+                  فيديو
+                {% else %}
+                  <img src="{{ url_for('static', filename='img/audio1.png') }}" class="rp-meta-icon" alt="">
+                  صوتي
+                {% endif %}
+              </span>
+            </div>
+
+            <div class="rp-verif-item__footer">
+              {% if v.errors > 0 %}
+                <span class="rp-verif-item__errtxt">
+                  <img src="{{ url_for('static', filename='img/wrong.png') }}" class="footer-icon" alt="">
+                  {{ v.errors }} خطأ مكتشف
+                </span>
+              {% else %}
+                <span class="rp-verif-item__oktxt">
+                  <img src="{{ url_for('static', filename='img/check-green.png') }}" class="footer-icon" alt="">
+                  بدون أخطاء
+                </span>
+              {% endif %}
+
+              <span class="rp-verif-item__link">التفاصيل ›</span>
+            </div>
+
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+          <p style="text-align:center;color:#999;padding:30px;">لا توجد تحققات مسجلة بعد</p>
+        {% endif %}
+      </div>
+
+    </div>
+    <!-- ===== شريط التصدير ===== -->
+    <div class="rp-export">
+      <div class="rp-export__right">
+        <div class="rp-export__title">تصدير التقرير الشامل</div>
+        <div class="rp-export__sub">احفظ تقريرك الكامل مع جميع التفاصيل والإحصائيات</div>
+      </div>
+      <div class="rp-export__btns">
+        <a href="{{ url_for('main.reports_excel', period=period) }}" class="rp-export__btn rp-export__btn--excel">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l4-4m-4 4l-4-4m-5 8h18"/>
+          </svg>
+          Excel
+        </a>
+        <a href="{{ url_for('main.reports_pdf_export', period=period) }}" class="rp-export__btn rp-export__btn--pdf">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l4-4m-4 4l-4-4m-5 8h18"/>
+          </svg>
+          PDF
+        </a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* eslint-disable */
+// @ts-nocheck
+// ===== تبويبات =====
+document.querySelectorAll('.rp-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.rp-tab').forEach(function(b) { b.classList.remove('rp-tab--active'); });
+    document.querySelectorAll('.rp-tabcontent').forEach(function(c) { c.classList.add('rp-tabcontent--hidden'); });
+    btn.classList.add('rp-tab--active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.remove('rp-tabcontent--hidden');
+  });
+});
+// ===== رسم مخطط توزيع الأخطاء =====
+var missingCount = {{ missing_count | default(0) | int }};
+var wrongCount   = {{ wrong_count   | default(0) | int }};
+var extraCount   = {{ extra_count   | default(0) | int }};
+var ctx = document.getElementById('errorsChart');
+if (ctx) {
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['زيادة كلمات', 'تحريف كلمات', 'نقص كلمات'],
+      datasets: [{
+        data: [missingCount, wrongCount, extraCount],
+        backgroundColor: ['#ef4444', '#b5a08a', '#f59e0b'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: { rtl: true }
+      },
+      cutout: 0,
+    }
+  });
+}
+
+// ===== تطبيق عرض شريط المصادر بدون Jinja داخل CSS =====
+document.querySelectorAll('.rp-source-item__bar-fill').forEach(function(el) {
+  el.style.width = (el.dataset.pct || 0) + '%';
+});
+
+// ===== رسم مخطط المصادر =====
+var sourceLabels = [
+  {% for src in source_distribution %}"{{ src.type }}"{% if not loop.last %},{% endif %}{% endfor %}
+];
+var sourceCounts = [
+  {% for src in source_distribution %}{{ src.count }}{% if not loop.last %},{% endif %}{% endfor %}
+];
+var ctxSrc = document.getElementById('sourcesChart');
+if (ctxSrc) {
+  new Chart(ctxSrc, {
+    type: 'bar',
+    data: {
+      labels: sourceLabels,
+      datasets: [{
+        data: sourceCounts,
+        backgroundColor: '#8E83A9',
+        borderRadius: 8,
+        borderSkipped: false,
+        barThickness: 62
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { rtl: true }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: '#4b4652',
+            font: { family: 'Tajawal', size: 12 }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'عدد الملفات',
+            color: '#6f6878',
+            font: { family: 'Tajawal', size: 12, weight: '700' }
+          },
+          ticks: {
+            precision: 0,
+            color: '#6f6878',
+            font: { family: 'Tajawal', size: 11 }
+          },
+          grid: {
+            color: 'rgba(142, 131, 169, 0.18)',
+            borderDash: [4, 4]
+          }
+        }
+      }
+    }
+  });
+}
+function exportExcel() {
+  alert('قريباً — تصدير Excel');
+}
+</script>
+{% endblock %}

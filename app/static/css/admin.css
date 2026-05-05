@@ -1,0 +1,432 @@
+/* ===== Admin Sidebar ===== */
+.ad-wrap {
+  display: flex;
+  min-height: calc(100vh - 60px);
+  direction: rtl;
+}
+
+.ad-side {
+  width: 220px;
+  min-width: 220px;
+  background: #fff;
+  border-left: 1px solid var(--border);
+  padding: 24px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.ad-side__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: "Tajawal", sans-serif;
+  width: 100%;
+  text-align: right;
+  transition: all 0.2s;
+}
+
+.ad-side__item:hover {
+  background: var(--bg);
+}
+
+.ad-side__item--active {
+  background: var(--main);
+  color: #fff;
+}
+
+.ad-side__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-side__icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.ad-side__item--active .ad-side__icon img {
+  filter: brightness(0) invert(1);
+}
+
+/* ===== Main Content ===== */
+.ad-main {
+  flex: 1;
+  padding: 28px 32px;
+  background: var(--bg);
+  min-width: 0;
+}
+
+/* ===== Page Header ===== */
+.ad-header {
+  margin-bottom: 24px;
+}
+
+.ad-header__title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--main2);
+  margin: 0 0 6px;
+}
+
+.ad-header__sub {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* ===== Tab Sections ===== */
+.ad-section { display: flex; flex-direction: column; gap: 20px; }
+.ad-section--hidden { display: none; }
+
+/* ===== Stats Cards ===== */
+.ad-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.ad-stat {
+  border-radius: 18px;
+  padding: 24px 20px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 120px;
+  justify-content: center;
+}
+
+.ad-stat--purple { background: linear-gradient(135deg, #9b8ec4, #7A7095); }
+.ad-stat--violet { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+.ad-stat--dark   { background: linear-gradient(135deg, #8E83A9, #6b5f8a); }
+.ad-stat--light  { background: linear-gradient(135deg, #B4A9CC, #8E83A9); }
+
+.ad-stat__img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  opacity: 0.85;
+  filter: brightness(0) invert(1);
+}
+
+.ad-stat__value {
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.ad-stat__label {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ===== Card ===== */
+.ad-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 26px;
+}
+
+.ad-card__title {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--main2);
+  margin: 0 0 18px;
+}
+
+/* ===== Activity List ===== */
+.ad-activity {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ad-activity__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 14px 16px;
+  transition: background 0.2s;
+}
+
+.ad-activity__item:hover { background: var(--border); }
+
+.ad-activity__info { flex: 1; }
+
+.ad-activity__name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--main2);
+  margin-bottom: 3px;
+}
+
+.ad-activity__detail {
+  font-size: 13px;
+  color: #666;
+}
+
+.ad-activity__date {
+  font-size: 13px;
+  color: #999;
+  white-space: nowrap;
+}
+
+/* ===== Quick Stats ===== */
+.ad-quick {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ad-quick__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.ad-quick__row:last-child { border-bottom: none; }
+
+.ad-quick__label { font-size: 14px; color: var(--text); }
+.ad-quick__value { font-size: 14px; font-weight: 900; color: var(--main); }
+
+/* ===== Users Table ===== */
+.ad-search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ad-search-wrap {
+  flex: 1;
+  position: relative;
+}
+
+.ad-search-wrap img {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.4;
+}
+
+.ad-search {
+  width: 100%;
+  padding: 11px 44px 11px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.ad-search:focus { border-color: var(--main); }
+
+.ad-table-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.ad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.ad-table thead {
+  background: var(--bg);
+}
+
+.ad-table th {
+  text-align: right;
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--main2);
+  white-space: nowrap;
+}
+
+.ad-table td {
+  padding: 14px 18px;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.ad-table tbody tr:hover { background: var(--bg); }
+
+.ad-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ad-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--main);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ad-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ad-badge--active   { background: #dcfce7; color: #16a34a; }
+.ad-badge--inactive { background: var(--bg); color: #888; }
+.ad-badge--count    { background: rgba(142,131,169,0.12); color: var(--main); }
+
+.ad-btn-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.ad-btn-icon img {
+  width: 50px;
+  height: 50px;
+}
+.ad-btn-icon {
+  border: none !important;
+  background: transparent;
+}
+.ad-btn-icon:hover { background: var(--bg); }
+.ad-btn-icon--del:hover { background: #fee2e2; }
+
+.ad-btn-icon img { width: 18px; height: 18px; object-fit: contain; opacity: 0.6; }
+.ad-btn-icon--del img { opacity: 0.5; }
+
+/* ===== Verifications Cards ===== */
+.ad-verif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ad-verif-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: box-shadow 0.2s;
+}
+
+.ad-verif-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+
+.ad-verif-card__left { display: flex; align-items: center; gap: 14px; flex: 1; }
+
+.ad-verif-card__info { flex: 1; }
+
+.ad-verif-card__name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--main2);
+  margin-bottom: 4px;
+}
+
+.ad-verif-card__meta {
+  font-size: 13px;
+  color: #888;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ad-btn-view {
+  padding: 9px 20px;
+  background: var(--main);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.ad-btn-view:hover { background: var(--main2); }
+
+/* ===== Reports placeholder ===== */
+.ad-reports-ph {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 60px;
+  text-align: center;
+  color: #999;
+  font-size: 16px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .ad-stats { grid-template-columns: repeat(2, 1fr); }
+  .ad-main  { padding: 20px 16px; }
+  .ad-side  { width: 180px; min-width: 180px; }
+}
+
+@media (max-width: 600px) {
+  .ad-wrap  { flex-direction: column; }
+  .ad-side  { width: 100%; height: auto; position: static; flex-direction: row; overflow-x: auto; padding: 10px; border-left: none; border-bottom: 1px solid var(--border); }
+  .ad-stats { grid-template-columns: 1fr 1fr; }
+}
+.side__icon img {
+  filter: brightness(0) opacity(0.45);
+}
+
+.side__item--active .side__icon img {
+  filter: brightness(0) opacity(0.45);
+}
+.side__item:hover {
+  background: transparent;
+}
+.side__item {
+  border: none !important;
+}

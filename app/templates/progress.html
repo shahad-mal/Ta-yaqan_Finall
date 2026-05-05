@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تيقن — جاري التحقق</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: #f5f2f8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 22px 22px 18px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 4px 24px rgba(100,68,154,0.10);
+      text-align: center;
+    }
+
+    /* ── الشعار ── */
+    .logo {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      margin: 0 auto 12px;
+      display: block;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #8f8f9b;
+      font-size: 0.82rem;
+      margin-bottom: 24px;
+      min-height: 22px;
+    }
+
+    /* ── دائرة التقدم ── */
+    .circle-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 24px;
+    }
+
+    .circle-wrap svg { transform: rotate(-90deg); display: block; }
+
+    .c-bg { fill: none; stroke: #e8e1ef; stroke-width: 8; }
+    .c-fg {
+      fill: none;
+      stroke: #8a78ab;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .circle-pct {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #7f6c9f;
+    }
+
+    /* ── الخطوات ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: right;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: #f2eee8;
+      border: 1.5px solid #ece5da;
+      transition: all 0.3s ease;
+    }
+
+    /* الأيقونة على اليمين */
+    .step-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #e6e1d8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.3s;
+      overflow: hidden;
+    }
+
+    .step-icon img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    /* النص على اليسار */
+    .step-text {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #555;
+      transition: color 0.3s;
+    }
+
+    .step-sub {
+      font-size: 0.76rem;
+      color: #9b9b9b;
+      margin-top: 2px;
+    }
+
+    /* ── حالات الخطوات ── */
+
+    /* pending */
+    .step.pending {
+      background: #f2eee8;
+      border-color: #ece5da;
+    }
+    .step.pending .step-icon {
+      background: #e7e0d6;
+    }
+    .step.pending .step-icon img {
+      filter: grayscale(1) brightness(0.30);
+    }
+    .step.pending .step-title {
+      color: #706d68;
+    }
+
+    /* active */
+    .step.active {
+      background: #f3f0fa;
+      border-color: #b8a8d6;
+    }
+    .step.active .step-icon {
+      background: #8a78ab;
+      animation: pulse 1.3s ease-in-out infinite;
+    }
+    .step.active .step-icon img {
+      filter: brightness(0) invert(1);
+      animation: spin 1.2s linear infinite;
+    }
+    .step.active .step-title {
+      color: #756292;
+    }
+
+    /* done */
+    .step.done {
+      background: #e9f8ef;
+      border-color: #a9e4be;
+    }
+    .step.done .step-icon {
+      background: #21c16b;
+    }
+    .step.done .step-icon img {
+      width: 28px;
+      height: 28px;
+      filter: none !important;
+      animation: none !important;
+    }
+    .step.done .step-title {
+      color: #177245;
+    }
+
+    /* error */
+    .step.error {
+      background: #fff1f2;
+      border-color: #fecdd3;
+    }
+    .step.error .step-icon {
+      background: #ef4444;
+    }
+    .step.error .step-icon img {
+      filter: brightness(0) invert(1);
+      animation: none !important;
+    }
+    .step.error .step-title {
+      color: #b91c1c;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: #b3adb8;
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- الشعار -->
+  <img src="{{ url_for('static', filename='img/logo.png') }}" class="logo" alt="تيقن"
+       onerror="this.style.display='none'">
+
+  <h2>جاري التحقق من التلاوة</h2>
+  <p class="subtitle" id="subtitle-text">
+    يتم الآن تحليل الصوت والتحقق من صحة التلاوة
+  </p>
+
+  <!-- دائرة التقدم -->
+  <div class="circle-wrap">
+    <svg width="110" height="110" viewBox="0 0 100 100">
+      <circle class="c-bg" cx="50" cy="50" r="45"/>
+      <circle class="c-fg" id="ring" cx="50" cy="50" r="45"/>
+    </svg>
+    <div class="circle-pct" id="pct">0%</div>
+  </div>
+
+  <!-- الخطوات -->
+  <div class="steps">
+
+    <div class="step pending" id="step-1">
+      <div class="step-icon">
+        <img id="img-1" src="{{ url_for('static', filename='img/icon-download.svg') }}" alt="">
+      </div>
+      <div class="step-text">
+        <div class="step-title">جاري تجهيز الملف...</div>
+        <div class="step-sub">استلام الملف وتجهيزه للمعالجة</div>
+      </div>
+    </div>
+
+    <div class="step pending" id="step-2">
+      <div class="step-icon">
+        <img id="img-2" src="{{ url_for('static', filename='img/icon-sound.svg') }}" alt="">
+      </div>
+      <div class="step-text">
+        <div class="step-title">جاري تحميل بيانات القرآن...</div>
+        <div class="step-sub">تهيئة بيانات السور والآيات</div>
+      </div>
+    </div>
+
+    <div class="step pending" id="step-3">
+      <div class="step-icon">
+        <img id="img-3" src="{{ url_for('static', filename='img/icon-search.svg') }}" alt="">
+      </div>
+      <div class="step-text">
+        <div class="step-title">جاري تحليل التلاوة بالذكاء الاصطناعي...</div>
+        <div class="step-sub">التعرف على الكلمات المنطوقة</div>
+      </div>
+    </div>
+
+    <div class="step pending" id="step-4">
+      <div class="step-icon">
+        <img id="img-4" src="{{ url_for('static', filename='img/book.png') }}" alt="">
+      </div>
+      <div class="step-text">
+        <div class="step-title">جاري تحديد السورة ومطابقة التلاوة...</div>
+        <div class="step-sub">التحقق من صحة الكلمات والآيات</div>
+      </div>
+    </div>
+
+    <div class="step pending" id="step-5">
+      <div class="step-icon">
+        <img id="img-5" src="{{ url_for('static', filename='img/check.png') }}" alt="">
+      </div>
+      <div class="step-text">
+        <div class="step-title">جاري حفظ النتائج وإعداد التقرير النهائي...</div>
+        <div class="step-sub">جمع النتائج والإحصائيات</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footer-note">يرجى الانتظار... قد تستغرق العملية بضع دقائق</p>
+</div>
+
+<script>
+const INPUT_ID   = {{ input_id }};
+const STATUS_URL = `/progress/status/${INPUT_ID}`;
+
+const LOADING_ICON = "{{ url_for('static', filename='img/icon-loading.svg') }}";
+const DONE_ICON    = "{{ url_for('static', filename='img/check.png') }}";
+const ERROR_ICON   = "{{ url_for('static', filename='img/wrong.png') }}";
+
+const STEP_ORDER = [
+  "prepare",
+  "load_data",
+  "prepare_audio",
+  "whisper_first",
+  "wav2vec2",
+  "detect_surah",
+  "whisper_second",
+  "redetect_surah",
+  "align",
+  "cleanup",
+  "audio_check",
+  "save_words",
+  "finalizing",
+  "done"
+];
+
+const STEP_MAP = {
+  prepare: 0,
+  load_data: 1,
+  prepare_audio: 1,
+  whisper_first: 2,
+  wav2vec2: 2,
+  detect_surah: 3,
+  whisper_second: 3,
+  redetect_surah: 3,
+  align: 3,
+  cleanup: 4,
+  audio_check: 4,
+  save_words: 4,
+  finalizing: 4,
+  done: 4
+};
+
+const STEP_IDS = [
+  { id: 'step-1', imgId: 'img-1' },
+  { id: 'step-2', imgId: 'img-2' },
+  { id: 'step-3', imgId: 'img-3' },
+  { id: 'step-4', imgId: 'img-4' },
+  { id: 'step-5', imgId: 'img-5' }
+];
+
+let finished = false;
+let pollTimer = null;
+
+function setProgress(pct) {
+  pct = Math.min(Math.max(Number(pct || 0), 0), 100);
+  document.getElementById('ring').style.strokeDashoffset = 283 * (1 - pct / 100);
+  document.getElementById('pct').textContent = Math.round(pct) + '%';
+}
+
+function setState(idx, state) {
+  const meta = STEP_IDS[idx];
+  if (!meta) return;
+
+  const el  = document.getElementById(meta.id);
+  const img = document.getElementById(meta.imgId);
+  if (!el || !img) return;
+
+  el.className = 'step ' + state;
+
+  if (state === 'active') {
+    img.src = LOADING_ICON;
+  } else if (state === 'done') {
+    img.src = DONE_ICON;
+  } else if (state === 'error') {
+    img.src = ERROR_ICON;
+  }
+}
+
+function resetAllSteps() {
+  STEP_IDS.forEach((_, i) => setState(i, 'pending'));
+}
+
+function applyStep(stepName) {
+  resetAllSteps();
+
+  let orderedIndex = STEP_ORDER.indexOf(stepName);
+  if (orderedIndex === -1) {
+    orderedIndex = 0;
+  }
+
+  const uiIndex = STEP_MAP.hasOwnProperty(stepName) ? STEP_MAP[stepName] : 0;
+
+  for (let i = 0; i < uiIndex; i++) {
+    setState(i, 'done');
+  }
+
+  if (stepName === 'done') {
+    setState(uiIndex, 'done');
+  } else {
+    setState(uiIndex, 'active');
+  }
+}
+
+function markErrorStep(stepName) {
+  resetAllSteps();
+
+  let orderedIndex = STEP_ORDER.indexOf(stepName);
+  if (orderedIndex === -1) {
+    orderedIndex = 0;
+  }
+
+  const uiIndex = STEP_MAP.hasOwnProperty(stepName) ? STEP_MAP[stepName] : 0;
+
+  for (let i = 0; i < uiIndex; i++) {
+    setState(i, 'done');
+  }
+
+  setState(uiIndex, 'error');
+}
+
+function updateSubtitle(label) {
+  const sub = document.getElementById('subtitle-text');
+  if (sub && label) {
+    sub.textContent = label;
+  }
+}
+
+async function pollStatus() {
+  if (finished) return;
+
+  try {
+    const res = await fetch(STATUS_URL, { cache: 'no-store' });
+    const data = await res.json();
+
+    if (typeof data.percent !== 'undefined') {
+      setProgress(data.percent);
+    }
+
+    if (data.label) {
+      updateSubtitle(data.label);
+    }
+
+    if (data.step) {
+      applyStep(data.step);
+    }
+
+    if (data.error === true) {
+  finished = true;
+  clearInterval(pollTimer);
+  markErrorStep(data.step || 'prepare');
+
+  const message =
+    data.audio_issue_message ||
+    data.error_message ||
+    "حصل خطأ أثناء المعالجة ❌";
+
+  updateSubtitle(message);
+
+  showErrorModal(message, data.redirect_url || "{{ url_for('main.upload') }}");
+  return;
+}
+
+    if (data.done === true) {
+  finished = true;
+  clearInterval(pollTimer);
+  setProgress(100);
+
+  if (data.audio_issue) {
+    const msg = data.audio_issue_message || "تعذر تحليل التسجيل بسبب مشكلة في الصوت.";
+    window.location.href = `/upload?modal_type=error&modal_message=${encodeURIComponent(msg)}`;
+    return;
+  }
+
+  if (data.error === true) {
+    const msg = data.error_message || "حصل خطأ أثناء المعالجة ❌";
+    window.location.href = `/upload?modal_type=error&modal_message=${encodeURIComponent(msg)}`;
+    return;
+  }
+
+  applyStep('done');
+  updateSubtitle("اكتملت المعالجة ✅");
+
+  if (data.redirect_url) {
+    setTimeout(() => {
+      window.location.href = data.redirect_url;
+    }, 700);
+  }
+}
+
+  } catch (e) {
+    // تجاهل خطأ الشبكة المؤقت
+  }
+}
+
+applyStep('prepare');
+setProgress(0);
+pollStatus();
+pollTimer = setInterval(pollStatus, 1500);
+
+function showErrorModal(message, redirectUrl) {
+  const old = document.getElementById("error-modal-overlay");
+  if (old) old.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "error-modal-overlay";
+  overlay.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+  `;
+
+  const modal = document.createElement("div");
+  modal.style.cssText = `
+    width: 100%;
+    max-width: 430px;
+    background: #fff;
+    border-radius: 22px;
+    padding: 24px 20px 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.16);
+    text-align: center;
+    position: relative;
+    direction: rtl;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  `;
+
+  modal.innerHTML = `
+    <button id="close-error-modal" style="
+      position:absolute;
+      top:12px;
+      left:12px;
+      width:36px;
+      height:36px;
+      border:none;
+      border-radius:50%;
+      background:#f3f0fa;
+      color:#7f6c9f;
+      font-size:22px;
+      cursor:pointer;
+      line-height:1;
+    ">×</button>
+
+    <div style="
+      width:72px;
+      height:72px;
+      border-radius:20px;
+      background:#fff1f2;
+      color:#dc2626;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:38px;
+      margin:0 auto 16px;
+      font-weight:bold;
+    ">!</div>
+
+    <h3 style="
+      font-size:1.15rem;
+      color:#1f2937;
+      margin-bottom:10px;
+      font-weight:700;
+    ">تعذر إكمال التحقق</h3>
+
+    <p style="
+      color:#6b7280;
+      font-size:0.95rem;
+      line-height:1.9;
+      margin-bottom:20px;
+    ">${message}</p>
+
+    <button id="ok-error-modal" style="
+      border:none;
+      background:#8a78ab;
+      color:white;
+      padding:12px 26px;
+      border-radius:14px;
+      font-size:0.95rem;
+      font-weight:600;
+      cursor:pointer;
+    ">حسنًا</button>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  function closeAndGo() {
+    window.location.href = redirectUrl || "{{ url_for('main.upload') }}";
+  }
+
+  document.getElementById("close-error-modal").onclick = closeAndGo;
+  document.getElementById("ok-error-modal").onclick = closeAndGo;
+}
+</script>
+
+</body>
+</html>

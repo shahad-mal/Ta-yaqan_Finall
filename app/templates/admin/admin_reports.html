@@ -1,0 +1,556 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | التقارير العامة{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .ar-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 6px;
+      margin-bottom: 20px;
+    }
+    .ar-tab {
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      font-family: "Tajawal", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .ar-tab:hover { background: var(--bg); }
+    .ar-tab--active { background: var(--main); color: #fff; }
+
+    .ar-section { display: flex; flex-direction: column; gap: 20px; }
+    .ar-section--hidden { display: none; }
+
+    .ar-charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Source legend */
+    .ar-source-legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .ar-source-item {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    .ar-source-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 auto 6px;
+    }
+    .ar-source-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+    .ar-source-num { font-size: 15px; font-weight: 900; color: var(--main2); }
+
+    /* Surah cards */
+    .ar-surah-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .ar-surah-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .ar-surah-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .ar-surah-rank {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--main);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ar-surah-name { font-size: 15px; font-weight: 900; color: var(--main2); }
+    .ar-surah-stat {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ar-surah-stat--red { background: #fff5f5; }
+    .ar-surah-stat__label { font-size: 12px; color: #888; }
+    .ar-surah-stat__val { font-size: 15px; font-weight: 900; color: var(--main2); }
+    .ar-surah-stat--red .ar-surah-stat__val { color: #dc2626; }
+    .ar-surah-stat__icon { font-size: 14px; opacity: 0.6; }
+
+    /* Top users */
+    .ar-user-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+    }
+    .ar-user-rank {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ar-user-info { flex: 1; }
+    .ar-user-name { font-size: 15px; font-weight: 700; color: var(--main2); margin-bottom: 4px; }
+    .ar-user-meta { font-size: 12px; color: #999; }
+    .ar-user-count { text-align: center; }
+    .ar-user-count__num { font-size: 22px; font-weight: 900; color: var(--main); }
+    .ar-user-count__label { font-size: 11px; color: #999; }
+
+
+    .ar-surah-rank--1 { background: var(--main); }
+    .ar-surah-rank--2 { background: var(--main2); }
+    .ar-surah-rank--3,
+    .ar-surah-rank--4,
+    .ar-surah-rank--5,
+    .ar-surah-rank--6 { background: #B4A9CC; }
+
+    .ar-user-rank--1 { background: linear-gradient(135deg,#FFD700,#FFA500); }
+    .ar-user-rank--2 { background: linear-gradient(135deg,#C0C0C0,#808080); }
+    .ar-user-rank--3 { background: linear-gradient(135deg,#CD7F32,#8B4513); }
+    .ar-user-rank--4 { background: var(--main); }
+    .ar-user-rank--5 { background: #B4A9CC; }
+    .ar-user-rank--default { background: var(--main); }
+
+    @media (max-width: 900px) {
+      .ar-charts-grid { grid-template-columns: 1fr; }
+      .ar-surah-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .ar-surah-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item {% if request.endpoint == 'main.admin_dashboard' %}side__item--active{% endif %}" href="{{ url_for('main.admin_dashboard') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/zap.png') }}" alt="نظرة عامة"></span>
+        <span>نظرة عامة</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_users' %}side__item--active{% endif %}" href="{{ url_for('main.admin_users') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/users.png') }}" alt="المستخدمين"></span>
+        <span>إدارة المستخدمين</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_verifications' %}side__item--active{% endif %}" href="{{ url_for('main.admin_verifications') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="التلاوات"></span>
+        <span>التلاوات والتحقق</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_reports' %}side__item--active{% endif %}" href="{{ url_for('main.admin_reports') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reportpage.png') }}" alt="التقارير"></span>
+        <span>التقارير العامة</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+
+    <!-- هيدر + فلتر -->
+    <div class="rp-header">
+      <div>
+        <h1 class="rp-header__title">التقارير العامة والإحصانيات الشاملة</h1>
+        <p class="rp-header__sub">نظرة شاملة على أداء النظام والمستخدمين</p>
+      </div>
+      <div class="rp-period">
+        {% for val, label in [('week','أسبوع'),('month','شهر'),('3months','3 أشهر'),('year','عام'),('all','الكل')] %}
+        <a href="{{ url_for('main.admin_reports', period=val) }}"
+           class="rp-period__btn {% if period == val %}rp-period__btn--active{% endif %}">
+          {{ label }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- 3 كروت -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px;">
+      <div class="rp-stat rp-stat--purple">
+        <img src="{{ url_for('static', filename='img/users.png') }}" class="rp-stat__img">
+        <div class="rp-stat__value">{{ total_users }}</div>
+        <div class="rp-stat__label">إجمالي المستخدمين</div>
+      </div>
+      <div class="rp-stat rp-stat--gray">
+        <img src="{{ url_for('static', filename='img/reportpagewhite.png') }}" class="rp-stat__img">
+        <div class="rp-stat__value">{{ total_verifications }}</div>
+        <div class="rp-stat__label">إجمالي التحققات</div>
+      </div>
+      <div class="rp-stat rp-stat--red">
+        <img src="{{ url_for('static', filename='img/wrong2.png') }}" class="rp-stat__img">
+        <div class="rp-stat__value">{{ total_errors }}</div>
+        <div class="rp-stat__label">إجمالي الأخطاء</div>
+      </div>
+    </div>
+
+    <!-- تبويبات -->
+    <div class="ar-tabs">
+      <button class="ar-tab ar-tab--active" data-tab="overview">نظرة عامة</button>
+      <button class="ar-tab" data-tab="users">المستخدمين</button>
+      <button class="ar-tab" data-tab="verifications">التحققات</button>
+    </div>
+
+    <!-- ===== تبويب: نظرة عامة ===== -->
+    <div class="ar-section" id="tab-overview">
+
+      <!-- charts -->
+      <div class="ar-charts-grid">
+
+        <!-- Bar Chart -->
+        <div class="rp-card">
+          <div class="rp-card__head">
+            <div class="rp-card__title" style="display:flex;align-items:center;gap:8px;">
+              <img src="{{ url_for('static', filename='img/active.png') }}" style="width:28px;height:28px;object-fit:contain;opacity:0.6;">
+              النشاط الأسبوعي
+            </div>
+            <div class="rp-card__sub">عدد التحققات في كل يوم من الأسبوع</div>
+          </div>
+          <canvas id="weeklyChart" height="180"></canvas>
+        </div>
+
+        <!-- Donut Chart -->
+        <div class="rp-card">
+          <div class="rp-card__head">
+            <div class="rp-card__title" style="display:flex;align-items:center;gap:8px;">
+              <img src="{{ url_for('static', filename='img/chart.png') }}" style="width:28px;height:28px;object-fit:contain;opacity:0.6;">
+              توزيع المصادر
+            </div>
+          </div>
+          <div style="display:flex;justify-content:center;">
+            <canvas id="sourceChart" width="160" height="160" style="width:160px;height:160px;"></canvas>
+          </div>
+          <div class="ar-source-legend">
+            <div class="ar-source-item">
+              <div class="ar-source-dot" style="background:#8E83A9;"></div>
+              <div class="ar-source-label">ملفات صوتية</div>
+              <div class="ar-source-num">{{ file_count }}</div>
+            </div>
+            <div class="ar-source-item">
+              <div class="ar-source-dot" style="background:#ef4444;"></div>
+              <div class="ar-source-label">روابط يوتيوب</div>
+              <div class="ar-source-num">{{ youtube_count }}</div>
+            </div>
+            <div class="ar-source-item">
+              <div class="ar-source-dot" style="background:#f59e0b;"></div>
+              <div class="ar-source-label">ملفات فيديو</div>
+              <div class="ar-source-num">{{ video_count }}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- السور الأكثر تحققاً -->
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div class="rp-card__title" style="display:flex;align-items:center;gap:8px;">
+            <img src="{{ url_for('static', filename='img/audio.png') }}" style="width:18px;height:18px;object-fit:contain;opacity:0.6;">
+            السور الأكثر تحققاً على مستوى النظام
+          </div>
+          <div class="rp-card__sub">عدد مرات التحقق من كل سورة وإجمالي الأخطاء المكتشفة فيها</div>
+        </div>
+        {% if top_surahs %}
+        <div class="ar-surah-grid">
+          {% for s in top_surahs %}
+          <div class="ar-surah-card">
+            <div class="ar-surah-head">
+              <div class="ar-surah-rank ar-surah-rank--{{ loop.index }}">
+                {{ loop.index }}
+              </div>
+              <div class="ar-surah-name">{{ s.name }}</div>
+            </div>
+            <div class="ar-surah-stat">
+              <span class="ar-surah-stat__label">عدد مرات التحقق</span>
+              <span class="ar-surah-stat__val">{{ s.count }} تحقق</span>
+            </div>
+            <div class="ar-surah-stat ar-surah-stat--red">
+              <span class="ar-surah-stat__label">إجمالي الأخطاء المكتشفة</span>
+              <span class="ar-surah-stat__val">{{ s.errors }} خطأ</span>
+            </div>
+            <div class="ar-surah-stat ar-surah-stat--red">
+              <span class="ar-surah-stat__label">ملفات تحتوي على أخطاء</span>
+              <span class="ar-surah-stat__val">{{ s.files_with_errors }} ملف</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <p style="text-align:center;color:#999;padding:30px;">لا توجد بيانات</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- ===== تبويب: المستخدمين ===== -->
+    <div class="ar-section ar-section--hidden" id="tab-users">
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div class="rp-card__title" style="display:flex;align-items:center;gap:8px;">
+            <img src="{{ url_for('static', filename='img/users.png') }}" style="width:18px;height:18px;object-fit:contain;opacity:0.6;">
+            المستخدمين الأكثر نشاطاً
+          </div>
+        </div>
+        {% if top_users %}
+          {% for u in top_users %}
+          <div class="ar-user-item">
+            <div class="ar-user-rank ar-user-rank--{{ loop.index if loop.index <= 5 else 'default' }}">
+              {{ loop.index }}
+            </div>
+            <div class="ar-user-info">
+              <div class="ar-user-name">{{ u.verifiername }}</div>
+              <div class="ar-user-meta">
+                {% set last = u.inputs | selectattr('processingdate', 'ne', none) | sort(attribute='processingdate', reverse=True) | first %}
+                {% if last and last.processingdate %}
+                  آخر نشاط: {{ last.processingdate.strftime('%Y-%m-%d') }}
+                {% else %}
+                  لا يوجد نشاط
+                {% endif %}
+              </div>
+            </div>
+            <div class="ar-user-count">
+              <div class="ar-user-count__num">{{ u.inputs | length }}</div>
+              <div class="ar-user-count__label">تحقق</div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p style="text-align:center;color:#999;padding:30px;">لا يوجد مستخدمون</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ===== تبويب: التحققات ===== -->
+    <div class="ar-section ar-section--hidden" id="tab-verifications">
+
+      <!-- توزيع أنواع الأخطاء -->
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div class="rp-card__title" style="display:flex;align-items:center;gap:8px;">
+            <img src="{{ url_for('static', filename='img/chart.png') }}" style="width:28px;height:28px;object-fit:contain;opacity:0.6;">
+            توزيع أنواع الأخطاء
+          </div>
+          <div class="rp-card__sub">يوضح هذا الرسم البياني نسب توزيع أنواع الأخطاء المختلفة في جميع التحققات</div>
+        </div>
+        <div class="rp-dist">
+          <div class="rp-dist__list">
+            {% set total_err = missing_count + wrong_count + extra_count %}
+            <div class="rp-dist__item">
+              <span class="rp-dist__dot" style="background:#ef4444;"></span>
+              <span class="rp-dist__name">نقص كلمات</span>
+              <span class="rp-dist__count">{{ missing_count }} <span class="rp-dist__err">خطأ</span>
+                <span style="font-size:12px;color:#999;">({{ ((missing_count / total_err * 100)|round(0)|int) if total_err > 0 else 0 }}%)</span>
+              </span>
+            </div>
+            <div class="rp-dist__item">
+              <span class="rp-dist__dot" style="background:#b5a08a;"></span>
+              <span class="rp-dist__name">تحريف كلمات</span>
+              <span class="rp-dist__count">{{ wrong_count }} <span class="rp-dist__err">خطأ</span>
+                <span style="font-size:12px;color:#999;">({{ ((wrong_count / total_err * 100)|round(0)|int) if total_err > 0 else 0 }}%)</span>
+              </span>
+            </div>
+            <div class="rp-dist__item">
+              <span class="rp-dist__dot" style="background:#f59e0b;"></span>
+              <span class="rp-dist__name">زيادة كلمات</span>
+              <span class="rp-dist__count">{{ extra_count }} <span class="rp-dist__err">خطأ</span>
+                <span style="font-size:12px;color:#999;">({{ ((extra_count / total_err * 100)|round(0)|int) if total_err > 0 else 0 }}%)</span>
+              </span>
+            </div>
+          </div>
+          <div class="rp-dist__chart">
+            <canvas id="errorsChart" width="220" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- الأخطاء الأكثر تكراراً -->
+      <div class="rp-card">
+        <div class="rp-card__head">
+          <div class="rp-card__title" style="display:flex;align-items:center;gap:8px;">
+            <img src="{{ url_for('static', filename='img/wrong.png') }}" style="width:18px;height:18px;object-fit:contain;opacity:0.6;">
+            الأخطاء الأكثر تكراراً على مستوى النظام
+          </div>
+        </div>
+        {% if top_words %}
+        <div class="rp-topwords">
+          {% for w in top_words %}
+          {% set cls = 'rp-word--red' if w.status == 'ناقص' else ('rp-word--orange' if w.status == 'زائد' else 'rp-word--yellow') %}
+          {% set badge_cls = 'rp-badge--red' if w.status == 'ناقص' else ('rp-badge--orange' if w.status == 'زائد' else 'rp-badge--yellow') %}
+          {% set label = 'نقص' if w.status == 'ناقص' else ('زائد' if w.status == 'زائد' else 'تحريف') %}
+          <div class="rp-word {{ cls }}">
+            <div class="rp-word__right">
+              <div class="rp-word__top">
+                <span class="rp-word__text">{{ w.word }}</span>
+                <span class="rp-badge {{ badge_cls }}">{{ label }}</span>
+              </div>
+              <div class="rp-word__meta">{{ w.surah }} — تكرر {{ w.count }} مرة - اكتُشف في {{ w.files }} ملفاً</div>
+            </div>
+            <div class="rp-word__count">{{ w.count }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <p style="text-align:center;color:#999;padding:30px;">لا توجد أخطاء مسجلة</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+ <!-- شريط التصدير -->
+<div class="rp-export">
+  <div class="rp-export__right">
+    <div class="rp-export__title">تصدير التقرير الإداري الشامل</div>
+    <div class="rp-export__sub">تقرير كامل بجميع الإحصائيات والبيانات التحليلية</div>
+  </div>
+
+  <div class="rp-export__btns">
+    <a href="{{ url_for('main.download_admin_report_pdf', period=period) }}"
+       class="rp-export__btn rp-export__btn--pdf"
+       style="text-decoration:none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 3v12m0 0l4-4m-4 4l-4-4m-5 8h18"/>
+      </svg>
+      PDF
+    </a>
+
+    <a href="{{ url_for('main.download_admin_report_excel', period=period) }}"
+       class="rp-export__btn rp-export__btn--excel"
+       style="text-decoration:none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 3v12m0 0l4-4m-4 4l-4-4m-5 8h18"/>
+      </svg>
+      Excel
+    </a>
+  </div>
+</div>
+  </main>
+</div>
+
+<script>
+// تبويبات
+document.querySelectorAll('.ar-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.ar-tab').forEach(function(b) { b.classList.remove('ar-tab--active'); });
+    document.querySelectorAll('.ar-section').forEach(function(s) { s.classList.add('ar-section--hidden'); });
+    btn.classList.add('ar-tab--active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.remove('ar-section--hidden');
+  });
+});
+
+// Bar Chart
+var weeklyData = {{ weekly_data | tojson }};
+var weeklyCtx = document.getElementById('weeklyChart');
+if (weeklyCtx) {
+  new Chart(weeklyCtx, {
+    type: 'bar',
+    data: {
+      labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+      datasets: [{
+        data: weeklyData,
+        backgroundColor: 'rgba(142, 131, 169, 0.75)',
+        borderRadius: 8,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1 } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// Donut Chart - المصادر
+var fileCount    = {{ file_count | int }};
+var youtubeCount = {{ youtube_count | int }};
+var videoCount   = {{ video_count | int }};
+var sourceCtx = document.getElementById('sourceChart');
+if (sourceCtx) {
+  new Chart(sourceCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['ملفات صوتية', 'روابط يوتيوب', 'ملفات فيديو'],
+      datasets: [{
+        data: [fileCount, youtubeCount, videoCount],
+        backgroundColor: ['#8E83A9', '#ef4444', '#f59e0b'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      cutout: '60%',
+    }
+  });
+}
+
+// Pie Chart - الأخطاء
+var missingCount = {{ missing_count | int }};
+var wrongCount   = {{ wrong_count | int }};
+var extraCount   = {{ extra_count | int }};
+var errorsCtx = document.getElementById('errorsChart');
+if (errorsCtx) {
+  new Chart(errorsCtx, {
+    type: 'pie',
+    data: {
+      labels: ['نقص كلمات', 'تحريف كلمات', 'زيادة كلمات'],
+      datasets: [{
+        data: [missingCount, wrongCount, extraCount],
+        backgroundColor: ['#ef4444', '#b5a08a', '#f59e0b'],
+        borderWidth: 0,
+      }]
+    },
+    options: { plugins: { legend: { display: false } } }
+  });
+}
+</script>
+{% endblock %}

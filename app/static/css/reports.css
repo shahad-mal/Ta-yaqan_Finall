@@ -1,0 +1,806 @@
+/* ===== هيدر الصفحة ===== */
+.rp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.rp-header__title {
+  margin: 0 0 6px;
+  color: var(--main2);
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.rp-header__sub {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* ===== فلتر الوقت ===== */
+.rp-period {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rp-period__btn {
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.rp-period__btn:hover {
+  background: var(--bg);
+}
+
+.rp-period__btn--active {
+  background: var(--main);
+  color: #fff;
+  border-color: var(--main);
+}
+
+/* ===== الكروت الأربعة ===== */
+.rp-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.rp-stat__img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.rp-stat {
+  border-radius: 18px;
+  padding: 24px 20px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: right;
+  gap: 6px;
+  min-height: 120px;
+  justify-content: center;
+}
+
+.rp-stat--purple { background: linear-gradient(135deg, #9b8ec4, #7A7095); }
+.rp-stat--red    { background: linear-gradient(135deg, #f87171, #dc2626); }
+.rp-stat--green  { background: linear-gradient(135deg, #4ade80, #16a34a); }
+.rp-stat--gray   { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+
+.rp-stat__icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.rp-stat__value {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.rp-stat__label {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* ===== تبويبات ===== */
+.rp-tabs {
+  display: flex;
+  gap: 4px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 6px;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.rp-tab {
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rp-tab:hover { background: var(--bg); }
+
+.rp-tab--active {
+  background: var(--main);
+  color: #fff;
+}
+
+/* ===== محتوى التبويب ===== */
+.rp-tabcontent { display: flex; flex-direction: column; gap: 16px; }
+.rp-tabcontent--hidden { display: none; }
+
+/* ===== الكارد العام ===== */
+.rp-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 26px;
+}
+
+.rp-card__head {
+  margin-bottom: 20px;
+}
+
+.rp-card__title {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--main2);
+  margin-bottom: 4px;
+}
+
+.rp-card__sub {
+  font-size: 13px;
+  color: #999;
+}
+
+/* ===== ملخص الأخطاء ===== */
+.rp-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.rp-summary-box {
+  border-radius: 16px;
+  padding: 28px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.rp-summary-box--red   { background: #fff0f0; border: 1px solid #fecaca; }
+.rp-summary-box--green { background: #f0fdf4; border: 1px solid #bbf7d0; }
+
+.rp-summary-box__icon { font-size: 28px; }
+.rp-summary-box__num  { font-size: 42px; font-weight: 900; line-height: 1; }
+.rp-summary-box--red   .rp-summary-box__num { color: #dc2626; }
+.rp-summary-box--green .rp-summary-box__num { color: #16a34a; }
+.rp-summary-box__label { font-size: 14px; font-weight: 700; color: #444; }
+.rp-summary-box__hint  { font-size: 12px; color: #999; }
+
+/* شريط مجموع الأخطاء */
+.rp-total-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+}
+
+.rp-total-bar__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rp-total-bar__title { font-size: 14px; color: #555; font-weight: 700; }
+.rp-total-bar__num   { font-size: 18px; font-weight: 800; color: var(--main2); }
+.rp-total-bar__left  { font-size: 13px; color: #999; }
+
+/* الخطأ الأكثر شيوعاً */
+.rp-common-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(142, 131, 169, 0.15);
+  border: 1px solid rgba(142, 131, 169, 0.4);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+
+.rp-common-error__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rp-common-error__icon  { 
+  font-size: 18px; 
+}
+
+.rp-common-error__label { 
+  font-size: 14px; 
+  color: #666; 
+  font-weight: 700; 
+}
+
+.rp-common-error__value { 
+  font-size: 18px; 
+  font-weight: 800; 
+  color: #5b4b8a; /* موف غامق بدل البني */
+}
+
+.rp-common-error__count { 
+  font-size: 13px; 
+  color: #7a7095; /* موف أفتح */
+}
+
+/* ===== توزيع الأخطاء ===== */
+.rp-dist {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.rp-dist__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.rp-dist__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.rp-dist__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rp-dist__name {
+  flex: 1;
+  margin-right: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.rp-dist__count {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--main2);
+}
+
+.rp-dist__err {
+  font-size: 12px;
+  font-weight: 500;
+  color: #999;
+  margin-right: 4px;
+}
+
+.rp-dist__chart {
+  width: 220px;
+  height: 220px;
+  flex-shrink: 0;
+}
+
+/* ===== قائمة أكثر الكلمات خطأ ===== */
+.rp-topwords {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rp-word {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 14px;
+  padding: 16px 18px;
+  border: 1px solid transparent;
+}
+
+.rp-word--red    { background: #fff5f5; border-color: #fecaca; }
+.rp-word--orange { background: #fff8f0; border-color: #fed7aa; }
+.rp-word--yellow { background: #fffbeb; border-color: #fde68a; }
+
+.rp-word__right { flex: 1; }
+
+.rp-word__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.rp-word__text {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text);
+  font-family: "Amiri", "Tajawal", serif;
+}
+
+.rp-word__meta {
+  font-size: 12px;
+  color: #999;
+  font-weight: 500;
+}
+
+.rp-word__count {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+  background: #dc2626;
+}
+
+.rp-word--orange .rp-word__count { background: #ea580c; }
+.rp-word--yellow .rp-word__count { background: #d97706; }
+
+/* ===== badges ===== */
+.rp-badge {
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rp-badge--red    { background: #fee2e2; color: #dc2626; }
+.rp-badge--orange { background: #ffedd5; color: #ea580c; }
+.rp-badge--yellow { background: #fef9c3; color: #ca8a04; }
+
+/* ===== شريط التصدير ===== */
+.rp-export {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--main2);
+  border-radius: 18px;
+  padding: 22px 28px;
+  margin-top: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.rp-export__title {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.rp-export__sub {
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+}
+
+.rp-export__btns {
+  display: flex;
+  gap: 10px;
+}
+
+.rp-export__btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.rp-export__btn:hover { opacity: 0.85; }
+
+.rp-export__btn--excel { background: #fff; color: var(--main2); }
+.rp-export__btn--pdf   { background: rgba(255,255,255,0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.4); }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .rp-stats { grid-template-columns: repeat(2, 1fr); }
+  .rp-dist__chart { width: 160px; height: 160px; }
+}
+
+@media (max-width: 600px) {
+  .rp-stats { grid-template-columns: 1fr 1fr; }
+  .rp-summary-grid { grid-template-columns: 1fr; }
+  .rp-tabs { width: 100%; justify-content: center; }
+}
+
+/* ═══════════════════════════════════════════
+   توزيع المصادر
+═══════════════════════════════════════════ */
+.rp-sources-wrap {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.rp-sources-chart {
+  flex: 0 0 380px;
+  height: 260px;
+  display: flex;
+  justify-content: center;
+}
+
+.rp-sources-chart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+.rp-sources-list {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.rp-source-item__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.rp-source-item__name {
+  font-size: 14px;
+  color: #2D2D2D;
+  font-weight: 500;
+}
+.rp-source-item__count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #8E83A9;
+}
+.rp-source-item__bar-bg {
+  background: #e8e3dc;
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+.rp-source-item__bar-fill {
+  height: 100%;
+  background: #8E83A9;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+.rp-source-item__pct {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════════
+   السور
+═══════════════════════════════════════════ */
+.rp-surahs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+.rp-surah-card {
+  background: #f7f2e9;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rp-surah-card__rank {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  background: #B4A9CC;
+}
+.rp-surah-card__rank--1 { background: #8E83A9; }
+.rp-surah-card__rank--2 { background: #9D93B8; }
+.rp-surah-card__rank--3 { background: #B4A9CC; }
+
+.rp-surah-card__name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #2D2D2D;
+}
+.rp-surah-card__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.rp-surah-card__lbl { color: #999; }
+.rp-surah-card__val { font-weight: 700; color: #2D2D2D; }
+.rp-surah-card__val--ok  { color: #16a34a; }
+.rp-surah-card__val--err { color: #dc2626; }
+
+/* ═══════════════════════════════════════════
+   التحققات المفصلة
+═══════════════════════════════════════════ */
+.rp-verif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rp-verif-item {
+  display: block;
+  text-decoration: none;
+  background: #f7f2e9;
+  border-radius: 14px;
+  padding: 16px 18px;
+  transition: box-shadow 0.2s, background 0.2s;
+  cursor: pointer;
+}
+.rp-verif-item:hover {
+  background: #f0ebe0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.rp-verif-item__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.rp-verif-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.rp-verif-item__surah {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2D2D2D;
+}
+.rp-verif-item__ayah {
+  font-size: 12px;
+  color: #888;
+}
+.rp-verif-item__badge {
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.rp-verif-item__badge--ok   { background: #dcfce7; color: #15803d; }
+.rp-verif-item__badge--warn { background: #fef9c3; color: #a16207; }
+.rp-verif-item__badge--err  { background: #fee2e2; color: #b91c1c; }
+
+.rp-verif-item__meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+.rp-verif-item__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.rp-verif-item__errtxt { color: #dc2626; }
+.rp-verif-item__oktxt  { color: #16a34a; }
+.rp-verif-item__link   { color: #8E83A9; font-weight: 600; }
+
+.rp-verif-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  color: #8a8590;
+  font-size: 13px;
+}
+
+.rp-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.rp-meta-icon {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px;
+  object-fit: contain;
+  display: inline-block;
+  opacity: .65;
+  vertical-align: middle;
+}
+.rp-verif-item__status img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+.rp-meta-icon,
+.footer-icon {
+  width: 14px !important;
+  height: 14px !important;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+.rp-meta-item,
+.rp-verif-item__errtxt,
+.rp-verif-item__oktxt {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.common-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: 0.8;
+}
+.common-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  opacity: 0.8;
+}
+
+/* ===== تعديلات تبويب المصادر والسور ===== */
+#tab-sources .rp-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#tab-sources .rp-section-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: .9;
+  flex: 0 0 auto;
+}
+
+#tab-sources .rp-source-type-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: .9;
+  flex: 0 0 auto;
+}
+
+#tab-sources .rp-source-item__name {
+  font-weight: 500 !important;
+}
+
+#tab-sources .rp-source-note {
+  margin-top: 16px;
+  background: rgba(142, 131, 169, 0.12);
+  border: 1px solid rgba(142, 131, 169, 0.24);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  direction: rtl;
+  box-shadow: 0 8px 22px rgba(80, 65, 110, 0.04);
+}
+
+#tab-sources .rp-source-note__icon {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  opacity: .85;
+  flex: 0 0 auto;
+}
+
+#tab-sources .rp-source-note__content {
+  flex: 1;
+  text-align: right;
+}
+
+#tab-sources .rp-source-note__title {
+  color: #3f3748;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+#tab-sources .rp-source-note__text {
+  color: #8b8594;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#tab-sources .rp-source-note__text strong {
+  color: #81759f;
+  font-weight: 700;
+}
+.rp-source-type-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: cover;
+    vertical-align: middle;
+}
+
+/* تكبير أيقونة الفيديو فقط حتى تتساوى بصريًا مع باقي الأيقونات */
+#tab-sources .rp-source-type-icon.rp-source-type-icon--video {
+    width: 20px !important;
+    height: 20px !important;
+    object-fit: contain !important;
+    transform: scale(2.8);
+    transform-origin: center;
+    display: inline-block;
+}
+
+/* ===== إصلاح أيقونة عنوان آخر التحققات فقط ===== */
+#tab-details .rp-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#tab-details .rp-section-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: .9;
+  flex: 0 0 auto;
+}
+
+/* ===== إصلاح ظهور أيقونة الفيديو في آخر التحققات فقط ===== */
+#tab-details .rp-meta-icon[src*="video"],
+#tab-details .rp-meta-icon[src*="vedio"],
+#tab-details .rp-meta-icon[src*="vidio"] {
+  content: url("../img/video4.png");
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  object-fit: contain !important;
+  opacity: .75 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+/* تكبير أيقونة الفيديو في آخر التحققات فقط */
+.rp-meta-icon[src*="video4"] {
+  transform: scale(2.5);
+  transform-origin: center;
+  opacity: 1 !important;
+}

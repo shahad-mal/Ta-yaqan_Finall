@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}تيقّن | سجل التحقق{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+   <aside class="side">
+  <nav class="side__nav">
+    <a class="side__item" href="{{ url_for('main.upload') }}">
+      <span class="side__icon">
+        <img src="{{ url_for('static', filename='img/upload1.png') }}" alt="رفع تلاوة">
+      </span>
+      <span>رفع تلاوة</span>
+    </a>
+
+    <a class="side__item {% if request.path.startswith('/history') %}side__item--active{% endif %}" 
+       href="{{ url_for('main.history') }}">
+      <span class="side__icon">
+        <img src="{{ url_for('static', filename='img/history.png') }}" alt="سجل التحقق">
+      </span>
+      <span>سجل التحقق</span>
+    </a>
+
+   <a class="side__item {% if request.endpoint == 'main.reports' %}side__item--active{% endif %}" href="{{ url_for('main.reports') }}">
+  <span class="side__icon"><img src="{{ url_for('static', filename='img/reports.png') }}" alt="التقارير"></span>
+  <span>التقارير</span>
+</a>
+
+    <a class="side__item {% if request.endpoint == 'main.listen' %}side__item--active{% endif %}"
+       href="{{ url_for('main.listen') }}">
+      <span class="side__icon">
+        <img src="{{ url_for('static', filename='img/listen.png') }}" alt="استماع للقرآن">
+      </span>
+      <span>استماع للقرآن</span>
+    </a>
+  </nav>
+</aside>
+    <main class="main">
+        <div class="main__head">
+            <h1 class="main__title">سجل التحقق</h1>
+            <p class="main__sub">جميع التلاوات التي تم التحقق منها</p>
+        </div>
+{% if not rows %}
+
+<div class="h-card" style="text-align:center; padding:40px;">
+  <img src="{{ url_for('static', filename='img/history.png') }}"
+       style="width:60px; margin-bottom:15px; opacity:.6;">
+  <p style="font-size:16px; color:#777; font-weight:600;">
+    لا توجد عمليات تحقق بعد
+  </p>
+</div>
+
+{% else %}
+
+       {% for row in rows %}
+  {% set rec = row.RecitationInput %}
+  {% set surah_name = row.surahname or "غير محدد" %}
+  {% set errors_count = row.errors_count or 0 %}
+  {% set is_ok = (errors_count == 0) %}
+  {% set errs = errors_map.get(rec.inputid, []) %}
+
+          <div class="h-card">
+            <div class="h-card__header">
+                <div class="h-surah">
+                    <h2 class="h-surah__name">{{ surah_name }}</h2>
+                    <div class="h-surah__meta">
+                        <span>الآيات {{ rec.startayah or '-' }}-{{ rec.endayah or '-' }} <i class="fas fa-book-open"></i></span>
+                        <span>{{ rec.processingdate.date() if rec.processingdate else '-' }} <i class="fas fa-calendar-alt"></i></span>
+                        <span>{{ rec.inputtype or '—' }} <i class="fas fa-music"></i></span>
+                    </div>
+                </div>
+
+               {% if is_ok %}
+  <div class="h-badge h-badge--success">
+      <img src="{{ url_for('static', filename='img/check-green.png') }}"
+           style="width:20px; height:20px; object-fit:contain; margin-left:4px;">
+      سليمة
+  </div>
+{% else %}
+  <div class="h-badge h-badge--error">
+      <img src="{{ url_for('static', filename='img/wrong.png') }}"
+           style="width:16px; height:18px; margin-left:4px;">
+      غير سليمة
+  </div>
+{% endif %}
+            </div>
+
+            <details class="h-details">
+                <summary class="h-details__btn">
+                    <span class="btn-text">عرض التفاصيل الكاملة</span>
+                    <i class="fas fa-chevron-down"></i>
+                </summary>
+
+                <div class="h-details__content">
+                    <div class="h-section">
+                        <h3 class="h-section__title">• معلومات المصدر</h3>
+                        <div class="h-data-grid">
+                            <div class="h-data-item"><span>نوع المصدر:</span> <strong>{{ rec.inputtype or '—' }}</strong></div>
+                            <div class="h-data-item"><span>مدة الملف:</span> <strong>{{ duration_map.get(rec.inputid, '—') }}</strong></div>
+    
+                            <div class="h-data-item"><span>الملف:</span> <strong>{{ display_name_map.get(rec.inputid, '—') }}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="h-section">
+                        <h3 class="h-section__title">• إحصائيات التلاوة</h3>
+                        <div class="h-stats">
+                            <div class="h-stat-box"><span>{{ rec.correctwords or 0 }}</span><p>كلمات صحيحة</p></div>
+                            <div class="h-stat-box"><span>{{ rec.totalwords or 0 }}</span><p>إجمالي الكلمات</p></div>
+                        </div>
+                    </div>
+
+                    {# === الأخطاء المكتشفة === #}
+{% if errors_count == 0 %}
+ <div class="h-section" style="text-align:center; background:#f9fdfa; padding:25px; border-radius:12px; border:1px dashed #cfeee0;">
+  
+<img src="{{ url_for('static', filename='img/check-green.png') }}"
+     style="width:50px; margin-bottom:12px;">
+  <p style="color:#27AE60; font-size:16px; font-weight:bold; margin:0;">
+    لا توجد أخطاء
+  </p>
+
+</div>
+{% else %}
+  <div class="h-section">
+    <h3 class="h-section__title h-section__title--error">الأخطاء المكتشفة ({{ errors_count }})</h3>
+
+    {# errors_map جاي من الروت: dict[inputid] = list of errors #}
+    {% set errs = errors_map.get(rec.inputid, []) %}
+
+    <div class="h-errors-list">
+      {% for e in errs %}
+        {% set t = e.errortype %}
+        {% set cls =
+          'err--wrong' if t == 'تحريف' else
+          'err--missing' if t == 'ناقص' else
+          'err--extra' if t == 'زائد' else
+          ''
+        %}
+
+        <div class="h-error-item {{ cls }}">
+          <span class="h-error__label h-ayah-pill">الآية {{ e.ayahnumber }}</span>
+
+          <div class="h-error__text">
+            <strong>{{ e.errortype }}</strong>
+            <p>{{ e.mismatchedtext }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+                    <a href="{{ url_for('main.results', input_id=rec.inputid) }}" class="h-submit-btn">
+                      الانتقال إلى صفحة النتائج الكاملة
+                    </a>
+
+                </div>
+            </details>
+          </div>
+        {% endfor %}
+{% endif %}
+    </main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const detailsElements = document.querySelectorAll('.h-details');
+    detailsElements.forEach(detail => {
+        detail.addEventListener('toggle', function() {
+            const btnText = this.querySelector('.btn-text');
+            const icon = this.querySelector('.h-details__btn i');
+            if (this.open) {
+                if(btnText) btnText.textContent = 'إخفاء التفاصيل';
+                if(icon) icon.className = 'fas fa-chevron-up';
+            } else {
+                if(btnText) btnText.textContent = 'عرض التفاصيل الكاملة';
+                if(icon) icon.className = 'fas fa-chevron-down';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

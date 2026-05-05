@@ -1,0 +1,512 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | تفاصيل المستخدم — {{ user.verifiername }}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <style>
+    /* ═══════ Page Header ═══════ */
+    .ud-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .ud-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: #fff;
+      border: 1.5px solid #e0d9f0;
+      border-radius: 12px;
+      color: #7A7095;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .ud-back-btn:hover {
+      background: #f3f0f8;
+      border-color: #c4b8e8;
+    }
+    .ud-back-btn svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none; stroke-width: 2.2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .ud-page-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #888;
+      margin: 0;
+    }
+
+    /* ═══════ Profile Card ═══════ */
+    .ud-profile-card {
+      background: #fff;
+      border: 1px solid #ede9f6;
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 4px 18px rgba(122,112,149,0.07);
+    }
+
+    .ud-avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #8E83A9, #64449a);
+      color: #fff;
+      font-size: 28px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ud-profile-info { flex: 1; }
+
+    .ud-profile-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #2d2d2d;
+      margin-bottom: 4px;
+    }
+
+    .ud-profile-email {
+      font-size: 14px;
+      color: #8E83A9;
+    }
+
+    /* ═══════ Stats Row ═══════ */
+    .ud-stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .ud-stat-card {
+      background: #fff;
+      border: 1px solid #ede9f6;
+      border-radius: 18px;
+      padding: 22px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 14px rgba(122,112,149,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ud-stat-card::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .ud-stat-card--purple::before { background: #8E83A9; }
+    .ud-stat-card--green::before  { background: #22c55e; }
+    .ud-stat-card--red::before    { background: #ef4444; }
+    .ud-stat-card--date::before   { background: #a78bfa; }
+
+    .ud-stat-left { text-align: right; }
+
+    .ud-stat-num {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+      color: #2d2d2d;
+      margin-bottom: 6px;
+    }
+
+    .ud-stat-card--date .ud-stat-num {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .ud-stat-label {
+      font-size: 13px;
+      color: #888;
+      font-weight: 600;
+    }
+
+    .ud-stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ud-stat-card--purple .ud-stat-icon { background: rgba(142,131,169,0.12); }
+    .ud-stat-card--green  .ud-stat-icon { background: rgba(34,197,94,0.10); }
+    .ud-stat-card--red    .ud-stat-icon { background: rgba(239,68,68,0.10); }
+    .ud-stat-card--date   .ud-stat-icon { background: rgba(167,139,250,0.12); }
+
+    .ud-stat-icon svg {
+      width: 24px; height: 24px;
+      fill: none; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .ud-stat-card--purple .ud-stat-icon svg { stroke: #8E83A9; }
+    .ud-stat-card--green  .ud-stat-icon svg { stroke: #22c55e; }
+    .ud-stat-card--red    .ud-stat-icon svg { stroke: #ef4444; }
+    .ud-stat-card--date   .ud-stat-icon svg { stroke: #a78bfa; }
+
+    /* ═══════ Section Title ═══════ */
+    .ud-section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #7A7095;
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ud-section-title svg {
+      width: 18px; height: 18px;
+      stroke: #8E83A9; fill: none; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ═══════ Surah Cards Grid ═══════ */
+    .ud-surahs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .ud-surah-card {
+      background: #fff;
+      border: 1px solid #ede9f6;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(122,112,149,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .ud-surah-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(122,112,149,0.12);
+    }
+
+    .ud-surah-card__head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ud-surah-trophy {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(142,131,169,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ud-surah-trophy svg {
+      width: 22px; height: 22px;
+      stroke: #8E83A9; fill: none; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .ud-surah-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #2d2d2d;
+    }
+
+    .ud-surah-count {
+      font-size: 12px;
+      color: #999;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .ud-surah-count svg {
+      width: 12px; height: 12px;
+      stroke: #bbb; fill: none; stroke-width: 2;
+    }
+
+    /* صفوف الأرقام */
+    .ud-surah-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ud-surah-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .ud-surah-row__label { font-weight: 600; }
+
+    .ud-surah-badge {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+    }
+
+    .ud-surah-badge--ok    { background: #dcfce7; color: #16a34a; }
+    .ud-surah-badge--err   { background: #fee2e2; color: #dc2626; }
+    .ud-surah-badge--amber { background: #fef9c3; color: #92400e; }
+
+    /* زر استعراض التحققات */
+    .ud-surah-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px;
+      background: linear-gradient(135deg, #8E83A9, #7A7095);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: "Tajawal", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      margin-top: 4px;
+      box-shadow: 0 4px 12px rgba(122,112,149,0.25);
+    }
+
+    .ud-surah-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .ud-surah-btn svg {
+      width: 16px; height: 16px;
+      stroke: #fff; fill: none; stroke-width: 2.2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* حالة فارغة */
+    .ud-empty {
+      text-align: center;
+      padding: 50px 20px;
+      color: #bbb;
+    }
+
+    .ud-empty svg {
+      width: 48px; height: 48px;
+      stroke: #ddd; fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      margin-bottom: 12px;
+    }
+
+    .ud-empty p {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+      .ud-stats-row      { grid-template-columns: repeat(2, 1fr); }
+      .ud-surahs-grid    { grid-template-columns: repeat(2, 1fr); }
+      .ud-profile-card   { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .ud-surahs-grid { grid-template-columns: 1fr; }
+      .ud-stats-row   { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item" href="{{ url_for('main.admin_dashboard') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/zap.png') }}" alt="نظرة عامة"></span>
+        <span>نظرة عامة</span>
+      </a>
+      <a class="side__item side__item--active" href="{{ url_for('main.admin_users') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/users.png') }}" alt="المستخدمين"></span>
+        <span>إدارة المستخدمين</span>
+      </a>
+      <a class="side__item" href="{{ url_for('main.admin_verifications') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="التلاوات"></span>
+        <span>التلاوات والتحقق</span>
+      </a>
+      <a class="side__item" href="{{ url_for('main.admin_reports') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reportpage.png') }}" alt="التقارير"></span>
+        <span>التقارير العامة</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+
+    <!-- Header -->
+    <div class="ud-page-header">
+      <p class="ud-page-title">تحققات المستخدم</p>
+      <a href="{{ url_for('main.admin_users') }}" class="ud-back-btn">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        العودة للمستخدمين
+      </a>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="ud-profile-card">
+      <div class="ud-avatar">{{ user.verifiername[0] | upper }}</div>
+      <div class="ud-profile-info">
+        <div class="ud-profile-name">{{ user.verifiername }}</div>
+        <div class="ud-profile-email">{{ user.verifieremail }}</div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="ud-stats-row">
+
+      <!-- إجمالي التحققات -->
+      <div class="ud-stat-card ud-stat-card--purple">
+        <div class="ud-stat-left">
+          <div class="ud-stat-num">{{ total }}</div>
+          <div class="ud-stat-label">إجمالي التحققات</div>
+        </div>
+        <div class="ud-stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+      </div>
+
+      <!-- التحققات السليمة -->
+      <div class="ud-stat-card ud-stat-card--green">
+        <div class="ud-stat-left">
+          <div class="ud-stat-num">{{ files_without_errors }}</div>
+          <div class="ud-stat-label">التحققات السليمة</div>
+        </div>
+        <div class="ud-stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+      </div>
+
+      <!-- التحققات التي تحتوي على أخطاء -->
+      <div class="ud-stat-card ud-stat-card--red">
+        <div class="ud-stat-left">
+          <div class="ud-stat-num">{{ files_with_errors }}</div>
+          <div class="ud-stat-label">التحققات التي تحتوي على أخطاء</div>
+        </div>
+        <div class="ud-stat-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+        </div>
+      </div>
+
+      <!-- آخر نشاط -->
+      <div class="ud-stat-card ud-stat-card--date">
+        <div class="ud-stat-left">
+          <div class="ud-stat-num">
+            {% if last_date %}{{ last_date.strftime('%Y-%m-%d') }}{% else %}—{% endif %}
+          </div>
+          <div class="ud-stat-label">آخر نشاط</div>
+        </div>
+        <div class="ud-stat-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- السور -->
+    <div class="ud-section-title">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      السور التي تحقق منها المستخدم
+    </div>
+
+    {% if user_surahs %}
+    <div class="ud-surahs-grid">
+      {% for s in user_surahs %}
+      <div class="ud-surah-card">
+
+        <div class="ud-surah-card__head">
+          <div class="ud-surah-trophy">
+            <svg viewBox="0 0 24 24"><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12M15 7a3 3 0 11-6 0 3 3 0 016 0zM6.5 7H4a1 1 0 00-1 1v1a4 4 0 004 4M17.5 7H20a1 1 0 011 1v1a4 4 0 01-4 4"/></svg>
+          </div>
+          <div>
+            <div class="ud-surah-name">سورة {{ s.name }}</div>
+            <div class="ud-surah-count">
+              <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              {{ s.count }} تحقق
+            </div>
+          </div>
+        </div>
+
+        <div class="ud-surah-stats">
+          <div class="ud-surah-row">
+            <span class="ud-surah-row__label">إجمالي الأخطاء:</span>
+            <span class="ud-surah-badge {% if s.errors == 0 %}ud-surah-badge--ok{% else %}ud-surah-badge--err{% endif %}">
+              {{ s.errors }}
+            </span>
+          </div>
+          <div class="ud-surah-row">
+            <span class="ud-surah-row__label">ملفات بها أخطاء:</span>
+            <span class="ud-surah-badge {% if s.files_with_errors == 0 %}ud-surah-badge--ok{% else %}ud-surah-badge--err{% endif %}">
+              {{ s.files_with_errors }}
+            </span>
+          </div>
+          <div class="ud-surah-row">
+            <span class="ud-surah-row__label">ملفات صحيحة:</span>
+            <span class="ud-surah-badge ud-surah-badge--ok">{{ s.files_ok }}</span>
+          </div>
+        </div>
+
+        <a href="{{ url_for('main.admin_user_surah', user_id=user.verifierid, surah_id=s.surah_id) }}"
+           class="ud-surah-btn">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          استعراض التحققات
+        </a>
+
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="ud-empty">
+      <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <p>لا توجد تحققات مسجلة لهذا المستخدم بعد</p>
+    </div>
+    {% endif %}
+
+  </main>
+</div>
+{% endblock %}

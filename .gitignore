@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.env
+# Ignore local media files
+# downloads/
+#*.wav
+#*.mp3
+#*.webm
+#*.mkv
+#*.mp4
+final_quran_model_v3/

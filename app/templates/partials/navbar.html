@@ -1,0 +1,111 @@
+<style>
+.navbar{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(0,0,0,.06);
+}
+.navbar__row{
+  max-width:1120px;
+  margin:0 auto;
+  padding:0 16px;
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.navbar__brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+}
+.navbar__logo{
+  height:42px;      /* حجم مناسب */
+  width:auto;
+  object-fit:contain;
+}
+.navbar__links{
+  display:flex;
+  align-items:center;
+  gap:32px;
+}
+.navbar__link{
+  text-decoration:none;
+  color:var(--tayaqan-text);
+  font-weight:600;
+}
+.navbar__link:hover{
+  color:var(--tayaqan-main);
+}
+.navbar__btn{
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:14px;
+  background:#8E83A9;
+  color:#fff !important;
+  font-weight:800;
+  text-decoration:none;
+  transition:0.2s ease;
+}
+
+.navbar__btn:hover{
+  background:#6F5E8C;
+  color:#fff !important;
+}
+
+.navbar__btn--withIcon{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+
+.navbar__btnIcon{
+  width:18px;
+  height:18px;
+  object-fit:contain;
+  filter: brightness(0) invert(1); /* يخلي الأيقونة بيضاء */
+}
+
+</style>
+
+<nav class="navbar">
+  <div class="navbar__row">
+<style>
+  .nav-logo{
+    height: 85px;
+    width: auto;
+    display: block;
+  }
+  @media (max-width: 768px){
+    .nav-logo{ height: 38px; }
+  }
+</style>
+
+    <a class="navbar__brand" href="/">
+          <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Ta'yaqan Logo" class="nav-logo">
+
+    
+    </a>
+    
+    <div class="navbar__links">
+      <a href="/" class="navbar__link">الرئيسية</a>
+      <a href="/about" class="navbar__link">من نحن</a>
+      <a href="/contact" class="navbar__link">تواصل معنا</a>
+      
+
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('auth.logout') }}" class="navbar__btn navbar__btn--withIcon">
+        <img src="{{ url_for('static', filename='img/logout.png') }}" alt="" class="navbar__btnIcon">
+      تسجيل الخروج
+        </a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="navbar__btn">تسجيل الدخول</a>
+      {% endif %}
+
+    </div>
+
+  </div>
+</nav>

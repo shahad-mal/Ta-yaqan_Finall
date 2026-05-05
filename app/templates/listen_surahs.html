@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}تيقّن | سور {{ reciter.recitername }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/listen.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item" href="{{ url_for('main.upload') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/upload1.png') }}"></span>
+        <span>رفع تلاوة</span>
+      </a>
+
+      <a class="side__item" href="{{ url_for('main.history') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}"></span>
+        <span>سجل التحقق</span>
+      </a>
+
+      <a class="side__item" href="{{ url_for('main.reports') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reports.png') }}"></span>
+        <span>التقارير</span>
+      </a>
+
+      <a class="side__item side__item--active" href="{{ url_for('main.listen') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/listen.png') }}"></span>
+        <span>استماع للقرآن</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="main__head">
+      <h1 class="main__title">سور القارئ: {{ reciter.recitername }}</h1>
+      <p class="main__sub">اختر السورة للاستماع إليها</p>
+    </div>
+
+    <div class="back-search-container">
+      <a href="{{ url_for('main.listen') }}" class="back-to-reciter">→ العودة للقراء</a>
+
+      <input type="text"
+             id="surahSearch"
+             class="surah-search"
+             placeholder="ابحث عن سورة...">
+    </div>
+
+    <div class="surahs-page-grid">
+      {% for audio, surah in surah_audios %}
+        <div class="surah-page-card" data-surah-name="{{ surah.surahname }}">
+          <div class="surah-page-card__name">
+            {{ surah.surahid }}. {{ surah.surahname }}
+          </div>
+
+          <button type="button"
+                  class="surah-page-card__btn"
+                  onclick='playSurah({{ audio.audio_url|tojson }}, {{ surah.surahname|tojson }})'>
+            <span style="display:flex; align-items:center; gap:8px; justify-content:center;">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  تشغيل
+</span>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="player-box" id="playerBox">
+      <div class="player-title" id="playerTitle">اختر سورة للاستماع</div>
+      <audio id="quranPlayer" controls class="quran-player"></audio>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function playSurah(audioUrl, surahName) {
+  const player = document.getElementById("quranPlayer");
+  const box = document.getElementById("playerBox");
+  const title = document.getElementById("playerTitle");
+
+  title.textContent = "يتم الآن تشغيل سورة " + surahName;
+  box.style.display = "block";
+
+  player.pause();
+  player.src = audioUrl;
+  player.load();
+
+  player.play().catch(function(error) {
+    console.log("Audio play error:", error);
+  });
+}
+
+const searchInput = document.getElementById("surahSearch");
+
+if (searchInput) {
+  searchInput.addEventListener("input", function () {
+    const value = this.value.trim();
+
+    document.querySelectorAll(".surah-page-card").forEach(function(card) {
+      const name = card.dataset.surahName || "";
+      card.style.display = name.includes(value) ? "block" : "none";
+    });
+  });
+}
+</script>
+
+{% endblock %}

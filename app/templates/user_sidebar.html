@@ -1,0 +1,34 @@
+<aside class="side">
+    <nav class="side__nav">
+        <a href="{{ url_for('main.upload') }}" 
+           class="side__item {% if request.endpoint == 'main.upload' %}side__item--active{% endif %}">
+            <span class="side__icon">
+                <img src="{{ url_for('static', filename='img/upload1.png') }}" alt="رفع تلاوة">
+            </span>
+            <span>رفع تلاوة</span>
+        </a>
+
+        <a href="{{ url_for('main.history') }}" 
+           class="side__item {% if request.endpoint == 'main.history' %}side__item--active{% endif %}">
+            <span class="side__icon">
+                <img src="{{ url_for('static', filename='img/history.png') }}" alt="سجل التحقق">
+            </span>
+            <span>سجل التحقق</span>
+        </a>
+
+        <a href="#" class="side__item"> 
+    <span class="side__icon">
+        <img src="{{ url_for('static', filename='img/reports.png') }}">
+    </span>
+    <span>التقارير</span>
+</a>
+
+        <a href="{{ url_for('main.listen') }}" 
+           class="side__item {% if request.endpoint == 'main.listen' %}side__item--active{% endif %}">
+            <span class="side__icon">
+                <img src="{{ url_for('static', filename='img/listen.png') }}" alt="استماع للقرآن">
+            </span>
+            <span>استماع للقرآن</span>
+        </a>
+    </nav>
+</aside>

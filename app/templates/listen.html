@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}تيقّن | استماع للقرآن{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/listen.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item" href="{{ url_for('main.upload') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/upload1.png') }}" alt="رفع تلاوة"></span>
+        <span>رفع تلاوة</span>
+      </a>
+
+      <a class="side__item" href="{{ url_for('main.history') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="سجل التحقق"></span>
+        <span>سجل التحقق</span>
+      </a>
+
+      <a class="side__item {% if request.endpoint == 'main.reports' %}side__item--active{% endif %}" href="{{ url_for('main.reports') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reports.png') }}" alt="التقارير"></span>
+        <span>التقارير</span>
+      </a>
+
+      <a class="side__item side__item--active" href="{{ url_for('main.listen') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/listen.png') }}" alt="استماع للقرآن"></span>
+        <span>استماع للقرآن</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="main__head listen-head">
+      <h1 class="main__title">استماع للقرآن الكريم</h1>
+      <p class="main__sub">استمع إلى القرآن بصوت أشهر القرّاء</p>
+    </div>
+
+   {% set wanted_reciters = ['عبد الباسط عبد الصمد', 'سعد الغامدي', 'ماهر المعيقلي', 'ياسر الدوسري'] %}
+
+    <div class="reciters-grid">
+      {% for reciter in reciters %}
+        {% if reciter.recitername in wanted_reciters %}
+          <div class="reciter-card">
+
+            <div class="reciter-card__icon">
+              <img src="{{ url_for('static', filename='img/listen.png') }}" alt="استماع">
+            </div>
+
+            <div class="reciter-card__info">
+              <h3 class="reciter-card__name">{{ reciter.recitername }}</h3>
+              <p class="reciter-card__desc">استمع إلى السور بصوت القارئ</p>
+            </div>
+
+            <a class="reciter-card__btn"
+               href="{{ url_for('main.listen_reciter', reciter_id=reciter.reciterid) }}">
+              <span>عرض السور</span>
+            </a>
+
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+  </main>
+</div>
+{% endblock %}

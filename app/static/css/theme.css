@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
+:root{
+  --tayaqan-main:#8E83A9;
+  --tayaqan-dark:#70658f;
+  --tayaqan-soft:#e2dcd4;
+  --tayaqan-text:#2D2D2D;
+  --tayaqan-accent:#A695F7;
+
+  --tayaqan-border:rgba(0,0,0,.06);
+  --tayaqan-navbg:#f4f2f6;
+
+  --container: 1120px;
+}
+
+.app-body{
+  font-family: "Tajawal", sans-serif;
+}
+
+body{
+  margin: 0;
+  font-family: "Tajawal", sans-serif;
+  color: var(--tayaqan-text);
+}
+
+/* تثبيت الخط على عناصر الفورم */
+button,
+input,
+textarea,
+select{
+  font-family: "Tajawal", sans-serif;
+}
+
+/* =========================
+   Navbar (Global - ثابت)
+========================= */
+.navbar{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--tayaqan-navbg);
+  box-shadow: 0 1px 0 var(--tayaqan-border);
+}
+
+.navbar__row{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 78px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  direction: rtl; /* ✅ اللوقو يمين + الروابط يسار */
+}
+
+/* يمين: اللوقو */
+.navbar__brand{
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+/* يسار: روابط + زر */
+.navbar__left{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  direction: rtl;
+}
+
+.navbar__links{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar__link{
+  text-decoration: none;
+  color: var(--tayaqan-text);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 8px 6px;
+  border-radius: 10px;
+  transition: .2s;
+  position: relative; /* underline */
+  white-space: nowrap;
+}
+
+.navbar__link:hover{
+  color: var(--tayaqan-main);
+}
+
+/* ✅ خط تحت الصفحة الحالية */
+.navbar__link.is-active{
+  color: var(--tayaqan-main);
+}
+.navbar__link.is-active::after{
+  content:"";
+  position:absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -10px;
+  height: 2px;
+  background: var(--tayaqan-main);
+  border-radius: 999px;
+}
+
+/* زر تسجيل الدخول (ثابت الحجم) */
+.navbar__btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 14px;
+
+  background: var(--tayaqan-main);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: .2s;
+}
+.navbar__btn:hover{
+  background: var(--tayaqan-dark);
+}
+
+/* زر تسجيل الخروج بدون خلفية */
+.navbar__logout{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+  padding: 0 6px;
+  border-radius: 10px;
+
+  background: transparent;
+  border: none;
+  color: #C0392B; /* أحمر */
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: .2s;
+}
+.navbar__logout:hover{
+  opacity: .85;
+  text-decoration: underline;
+}
+
+/* اللوقو */
+.nav-logo{
+  height: 68px;
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 820px){
+  .navbar__links{ display: none; }
+  .nav-logo{ height: 54px; }
+}
+
+@media (max-width: 767px){
+  .nav-logo{ height: 45px; }
+}
+
+/* icon logout*/
+.navbar__logout{
+  display:inline-flex;
+  align-items:center;
+  gap:2px;
+  color:#B91C1C;
+  font-weight:600;
+  text-decoration:none;
+}
+
+.navbar__logout:hover{
+  color:#7F1D1D;
+}
+
+.logout-icon{
+  width:25px;
+  height:25px;
+  object-fit:contain;
+}
+
+/* part control panel*/
+.navbar__brand{
+  text-decoration: none;
+}
+
+.dashboard-label{
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.navbar__brand:hover{
+  text-decoration: none;
+}
+

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | لوحة الإدارة{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item side__item--active" href="{{ url_for('main.admin_dashboard') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/zap.png') }}" alt="نظرة عامة"></span>
+        <span>نظرة عامة</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_users' %}side__item--active{% endif %}" href="{{ url_for('main.admin_users') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/users.png') }}" alt="المستخدمين"></span>
+        <span>إدارة المستخدمين</span>
+      <a class="side__item {% if request.endpoint == 'main.admin_verifications' %}side__item--active{% endif %}" href="{{ url_for('main.admin_verifications') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="التلاوات"></span>
+        <span>التلاوات والتحقق</span>
+        
+
+      {# <a class="side__item" href="#">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reports.png') }}" alt="التقارير"></span>
+        <span>التقارير العامة</span>
+      </a> #}
+
+      <a class="side__item {% if request.endpoint == 'main.admin_reports' %}side__item--active{% endif %}" href="{{ url_for('main.admin_reports') }}">
+  <span class="side__icon"><img src="{{ url_for('static', filename='img/reportpage.png') }}" alt="التقارير"></span>
+  <span>التقارير العامة</span>
+</a>
+
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+
+    <!-- هيدر -->
+    <div class="rp-header">
+      <div>
+        <h1 class="rp-header__title">نظرة عامة على النظام</h1>
+        <p class="rp-header__sub">إحصائيات ومؤشرات الأداء الرئيسية</p>
+      </div>
+    </div>
+
+    <!-- كروت الإحصاء -->
+    <div class="rp-stats">
+      <div class="rp-stat rp-stat--purple">
+        <img src="{{ url_for('static', filename='img/users.png') }}" class="rp-stat__img">
+        <div class="rp-stat__value">{{ total_users }}</div>
+        <div class="rp-stat__label">إجمالي المستخدمين</div>
+      </div>
+      <div class="rp-stat rp-stat--gray">
+        <img src="{{ url_for('static', filename='img/check.png') }}" class="rp-stat__img">
+        <div class="rp-stat__value">{{ total_verifications }}</div>
+        <div class="rp-stat__label">جميع التحققات المكتملة</div>
+      </div>
+      <div class="rp-stat rp-stat--red">
+        <img src="{{ url_for('static', filename='img/wrong2.png') }}" class="rp-stat__img">
+        <div class="rp-stat__value">{{ total_errors }}</div>
+        <div class="rp-stat__label">مجموع الأخطاء في كل التحققات</div>
+      </div>
+      <div class="rp-stat rp-stat--green">
+        <img src="{{ url_for('static', filename='img/clock.png') }}" class="rp-stat__img">
+        <div class="rp-stat__value">{{ active_today }}</div>
+        <div class="rp-stat__label">المستخدمون النشطون اليوم</div>
+      </div>
+    </div>
+
+    <!-- النشاط الأخير -->
+<div class="rp-card" style="margin-bottom: 16px;">
+  <div class="rp-card__head">
+    <div class="rp-card__title">النشاط الأخير</div>
+  </div>
+
+  {% if recent_verifications %}
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      {% for v in recent_verifications %}
+      <div style="display:flex; align-items:center; justify-content:space-between; width:100%; background:var(--bg); border-radius:12px; padding:14px 16px; box-sizing:border-box;">
+        
+        <div style="text-align:right;">
+          <div style="font-size:14px; font-weight:700; color:var(--main2); margin-bottom:3px;">
+            {{ v.verifier.verifiername if v.verifier else 'مستخدم غير معروف' }}
+          </div>
+
+          <div style="font-size:13px; color:#666;">
+            {{ v.surah.surahname if v.surah else '—' }}
+            {% if v.startayah and v.endayah %}
+              — الآيات {{ v.startayah }}-{{ v.endayah }}
+            {% endif %}
+          </div>
+        </div>
+
+        <div style="font-size:13px; color:#999; white-space:nowrap; text-align:left;">
+          {{ v.processingdate.strftime('%Y-%m-%d %H:%M') if v.processingdate else '—' }}
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="text-align:center; color:#999; padding:20px;">لا يوجد نشاط حتى الآن</p>
+  {% endif %}
+</div>
+
+    <!-- إحصائيات سريعة -->
+    <div class="rp-card">
+      <div class="rp-card__head">
+        <div class="rp-card__title">إحصائيات سريعة</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border);">
+          <span style="font-size:14px; color:var(--text);">التحققات السليمة</span>
+          <span style="font-size:14px; font-weight:900; color:var(--main);">{{ files_without_errors }}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border);">
+          <span style="font-size:14px; color:var(--text);">التحققات بها أخطاء</span>
+          <span style="font-size:14px; font-weight:900; color:var(--main);">{{ files_with_errors }}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border);">
+          <span style="font-size:14px; color:var(--text);">أكثر نوع خطأ شيوعاً</span>
+          <span style="font-size:14px; font-weight:900; color:var(--main);">{{ most_common_error_ar }}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:4px 0;">
+          <span style="font-size:14px; color:var(--text);">السورة الأكثر تحققاً</span>
+          <span style="font-size:14px; font-weight:900; color:var(--main);">{{ top_surah_name }}</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+{% endblock %}

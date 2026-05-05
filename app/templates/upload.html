@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | رفع تلاوة{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+
+  <style>
+    .custom-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .custom-modal-box {
+      background: #fff;
+      width: 100%;
+      max-width: 430px;
+      border-radius: 24px;
+      padding: 28px 24px 22px;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+      border: 2px solid #e8e1f2;
+    }
+
+    .custom-modal-box.error {
+      border-color: #d8cdea;
+    }
+
+    .custom-modal-box.success {
+      border-color: #cfe8d7;
+    }
+
+    .custom-modal-close {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      border: none;
+      background: transparent;
+      font-size: 26px;
+      cursor: pointer;
+      color: #8E83A9;
+      line-height: 1;
+    }
+
+    .custom-modal-icon {
+      font-size: 34px;
+      margin-bottom: 14px;
+    }
+
+    .custom-modal-text {
+      font-size: 20px;
+      line-height: 1.9;
+      color: #3f3a4a;
+      margin-bottom: 22px;
+      font-weight: 600;
+    }
+
+    .custom-modal-btn {
+      background: #8E83A9;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 34px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 140px;
+    }
+
+    .custom-modal-btn:hover {
+      opacity: 0.95;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+{% if modal_message %}
+<div id="customModal" class="custom-modal-overlay">
+  <div class="custom-modal-box {{ modal_type }}">
+    <button class="custom-modal-close" onclick="closeCustomModal()">×</button>
+
+    <div class="custom-modal-icon">
+      {% if modal_type == 'error' %}
+        ❌
+      {% else %}
+        ✅
+      {% endif %}
+    </div>
+
+    <div class="custom-modal-text">
+      {{ modal_message }}
+    </div>
+
+    <button class="custom-modal-btn" onclick="closeCustomModal()">حسنًا</button>
+  </div>
+</div>
+{% endif %}
+
+<div class="dash">
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item {% if request.path.startswith('/upload') %}side__item--active{% endif %}" href="{{ url_for('main.upload') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/upload1.png') }}" alt="رفع تلاوة"></span>
+        <span>رفع تلاوة</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.history' %}side__item--active{% endif %}" href="{{ url_for('main.history') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="سجل التحقق"></span>
+        <span>سجل التحقق</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.reports' %}side__item--active{% endif %}" href="{{ url_for('main.reports') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reports.png') }}" alt="التقارير"></span>
+        <span>التقارير</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.listen' %}side__item--active{% endif %}" href="{{ url_for('main.listen') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/listen.png') }}" alt="استماع للقرآن"></span>
+        <span>استماع للقرآن</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="main__head">
+      <h1 class="main__title">رفع تلاوة للتحقق</h1>
+      <p class="main__sub">اختر طريقة الإدخال المناسبة لك</p>
+    </div>
+
+    <!-- Switch Cards (رابط يوتيوب / رفع ملف) -->
+    <div class="switch">
+      <button type="button" class="switch__card switch__card--active" id="btnYoutube">
+        <div class="switch__icon">
+          <img src="{{ url_for('static', filename='img/youtube.png') }}" alt="رابط يوتيوب">
+        </div>
+        <div class="switch__text">
+          <div class="switch__title">رابط يوتيوب</div>
+          <div class="switch__desc">أدخل رابط التلاوة</div>
+        </div>
+      </button>
+
+      <button type="button" class="switch__card" id="btnFile">
+        <div class="switch__icon">
+          <img src="{{ url_for('static', filename='img/file.png') }}" alt="رفع ملف">
+        </div>
+        <div class="switch__text">
+          <div class="switch__title">رفع ملف</div>
+          <div class="switch__desc">صوت أو فيديو</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Panels -->
+    <section class="panel" id="panelFile">
+      <div class="panel__icon">
+        <img src="{{ url_for('static', filename='img/file.png') }}" alt="رفع ملف">
+      </div>
+
+      <h3 class="panel__title">رفع ملف صوت أو فيديو</h3>
+      <p class="panel__sub">صيغ مدعومة: MP3, MP4, WAV, M4A</p>
+
+      <form class="upload" method="POST" action="{{ url_for('main.file_verify') }}" enctype="multipart/form-data">
+        <input
+          type="file"
+          id="recitation_file"
+          name="recitation_file"
+          accept=".mp3,.mp4,.wav,.m4a,audio/*,video/*"
+          hidden
+          required
+        />
+
+        <label class="upload__btn" for="recitation_file">اختر ملف</label>
+
+        <div class="upload__hint" id="fileName">لم يتم اختيار ملف بعد</div>
+
+        <button class="upload__submit" type="submit">بدء التحقق</button>
+      </form>
+    </section>
+
+    <section class="panel panel--active" id="panelYoutube">
+      <div class="panel__icon">
+        <img src="{{ url_for('static', filename='img/youtube.png') }}" alt="يوتيوب">
+      </div>
+
+      <h3 class="panel__title">ادخل رابط يوتيوب</h3>
+      <p class="panel__sub">الصق رابط التلاوة من يوتيوب هنا</p>
+
+      <form class="yt" method="POST" action="{{ url_for('main.youtube_verify') }}">
+        <input class="yt__input" type="url" name="youtube_url"
+               placeholder="https://youtube.com/watch?v=..." required>
+        <button class="yt__btn" type="submit">بدء التحقق</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+  const btnFile = document.getElementById('btnFile');
+  const btnYoutube = document.getElementById('btnYoutube');
+  const panelFile = document.getElementById('panelFile');
+  const panelYoutube = document.getElementById('panelYoutube');
+
+  function activate(which) {
+    if (which === 'file') {
+      btnFile.classList.add('switch__card--active');
+      btnYoutube.classList.remove('switch__card--active');
+      panelFile.classList.add('panel--active');
+      panelYoutube.classList.remove('panel--active');
+    } else {
+      btnYoutube.classList.add('switch__card--active');
+      btnFile.classList.remove('switch__card--active');
+      panelYoutube.classList.add('panel--active');
+      panelFile.classList.remove('panel--active');
+    }
+  }
+
+  btnFile.addEventListener('click', () => activate('file'));
+  btnYoutube.addEventListener('click', () => activate('youtube'));
+
+  const fileInput = document.getElementById('recitation_file');
+  const fileName = document.getElementById('fileName');
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files.length > 0) {
+      fileName.textContent = fileInput.files[0].name;
+    } else {
+      fileName.textContent = 'لم يتم اختيار ملف بعد';
+    }
+  });
+</script>
+
+<script>
+  function closeCustomModal() {
+    const modal = document.getElementById("customModal");
+    if (modal) {
+      modal.style.display = "none";
+    }
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete("modal_message");
+    url.searchParams.delete("modal_type");
+    window.history.replaceState({}, "", url.pathname);
+  }
+</script>
+
+{% endblock %}

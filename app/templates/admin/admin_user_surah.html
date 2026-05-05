@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | تحققات {{ surah.surahname }} — {{ user.verifiername }}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <style>
+    /* ═══════ Back + Title ═══════ */
+    .us-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .us-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: #fff;
+      border: 1.5px solid #e0d9f0;
+      border-radius: 12px;
+      color: #7A7095;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .us-back-btn:hover { background: #f3f0f8; border-color: #c4b8e8; }
+    .us-back-btn svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .us-header-info { text-align: right; }
+    .us-header-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #7A7095;
+      margin: 0 0 4px;
+    }
+    .us-header-sub {
+      font-size: 13px;
+      color: #999;
+      margin: 0;
+    }
+
+    /* ═══════ Verifications List ═══════ */
+    .us-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .us-item {
+      background: #fff;
+      border: 1px solid #ede9f6;
+      border-radius: 16px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 4px 14px rgba(122,112,149,0.06);
+      transition: box-shadow 0.2s;
+    }
+    .us-item:hover { box-shadow: 0 8px 24px rgba(122,112,149,0.12); }
+
+    .us-item__right {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .us-item__row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .us-item__date {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      color: #888;
+    }
+    .us-item__date svg {
+      width: 14px; height: 14px;
+      stroke: #bbb; fill: none; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* مصدر */
+    .us-source-badge {
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .us-source--file    { background: #f0fdf4; color: #166534; }
+    .us-source--youtube { background: #fef3c7; color: #b45309; }
+    .us-source--video   { background: #e0e7ff; color: #4338ca; }
+
+    /* حالة */
+    .us-status-badge {
+      padding: 5px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .us-status--ok  { background: #dcfce7; color: #15803d; }
+    .us-status--err { background: #fee2e2; color: #b91c1c; }
+
+    /* عدد الأخطاء */
+    .us-errors-count {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: #888;
+    }
+    .us-errors-count strong {
+      font-size: 15px;
+      font-weight: 800;
+      color: #dc2626;
+    }
+    .us-errors-count.ok strong { color: #16a34a; }
+
+    /* زر عرض النتائج */
+    .us-view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      background: linear-gradient(135deg, #8E83A9, #7A7095);
+      color: #fff;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(122,112,149,0.22);
+    }
+    .us-view-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .us-view-btn svg {
+      width: 15px; height: 15px;
+      stroke: #fff; fill: none; stroke-width: 2.2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* فارغة */
+    .us-empty {
+      text-align: center;
+      padding: 60px 20px;
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #ede9f6;
+      color: #bbb;
+    }
+    .us-empty svg {
+      width: 48px; height: 48px;
+      stroke: #ddd; fill: none; stroke-width: 1.5;
+      margin-bottom: 12px;
+    }
+    .us-empty p { margin: 0; font-size: 15px; font-weight: 600; }
+
+    @media (max-width: 700px) {
+      .us-item { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item" href="{{ url_for('main.admin_dashboard') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/zap.png') }}" alt="نظرة عامة"></span>
+        <span>نظرة عامة</span>
+      </a>
+      <a class="side__item side__item--active" href="{{ url_for('main.admin_users') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/users.png') }}" alt="المستخدمين"></span>
+        <span>إدارة المستخدمين</span>
+      </a>
+      <a class="side__item" href="{{ url_for('main.admin_verifications') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="التلاوات"></span>
+        <span>التلاوات والتحقق</span>
+      </a>
+      <a class="side__item" href="{{ url_for('main.admin_reports') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/reportpage.png') }}" alt="التقارير"></span>
+        <span>التقارير العامة</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+
+    <!-- Header -->
+    <div class="us-header">
+      <div class="us-header-info">
+        <h1 class="us-header-title">تحققات سورة {{ surah.surahname }}</h1>
+        <p class="us-header-sub">{{ user.verifiername }} — {{ verifications|length }} تحقق</p>
+      </div>
+      <a href="{{ url_for('main.admin_user_detail', user_id=user.verifierid) }}" class="us-back-btn">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        العودة لتفاصيل المستخدم
+      </a>
+    </div>
+
+    <!-- قائمة التحققات -->
+    {% if verifications %}
+    <div class="us-list">
+      {% for v in verifications %}
+      <div class="us-item">
+
+        <div class="us-item__right">
+          <!-- الصف الأول: التاريخ + المصدر -->
+          <div class="us-item__row">
+            <span class="us-item__date">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              {{ v.date }} — {{ v.time }}
+            </span>
+
+            {% if 'youtube' in v.source_type %}
+              <span class="us-source-badge us-source--youtube">▶ يوتيوب</span>
+            {% elif 'video' in v.source_type %}
+              <span class="us-source-badge us-source--video">🎬 فيديو</span>
+            {% else %}
+              <span class="us-source-badge us-source--file">🎵 صوتي</span>
+            {% endif %}
+          </div>
+
+          <!-- الصف الثاني: الحالة + الأخطاء -->
+          <div class="us-item__row">
+            {% if v.errors == 0 %}
+              <span class="us-status-badge us-status--ok">✓ سليمة</span>
+              <span class="us-errors-count ok">
+                <strong>0</strong> أخطاء
+              </span>
+            {% else %}
+              <span class="us-status-badge us-status--err">✗ بها أخطاء</span>
+              <span class="us-errors-count">
+                <strong>{{ v.errors }}</strong> خطأ مكتشف
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- زر عرض النتائج -->
+        {% if v.status %}
+        <a href="{{ url_for('main.results',
+                   input_id=v.inputid,
+                   admin_view=1,
+                   user_id=user.verifierid,
+                   surah_id=surah.surahid) }}"
+   class="us-view-btn">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          عرض النتائج
+        </a>
+        {% endif %}
+
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="us-empty">
+      <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      <p>لا توجد تحققات لهذه السورة</p>
+    </div>
+    {% endif %}
+
+  </main>
+</div>
+{% endblock %}

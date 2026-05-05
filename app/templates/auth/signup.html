@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | إنشاء حساب{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="auth-page">
+  <div class="auth-wrap">
+    <div class="auth-card">
+
+      <section class="auth-left">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Ta'yaqan Logo" class="auth-logo">
+        <h2>مرحبًا بك في تيقّن</h2>
+        <p>أنشئ حسابك وابدأ التحقق من التلاوات وإدارة سجلاتك وتقاريرك بسهولة.</p>
+
+        <ul class="auth-features">
+          <li>
+            <img class="check" src="{{ url_for('static', filename='img/check.png') }}" alt="check">
+            إنشاء حساب خلال ثواني
+          </li>
+          <li>
+            <img class="check" src="{{ url_for('static', filename='img/check.png') }}" alt="check">
+            حفظ سجل التلاوات
+          </li>
+          <li>
+            <img class="check" src="{{ url_for('static', filename='img/check.png') }}" alt="check">
+            نتائج وتقارير منظمة
+          </li>
+        </ul>
+      </section>
+
+      <section class="auth-right">
+        <h3>إنشاء حساب</h3>
+        <p class="sub">أدخل البيانات التالية لإنشاء حساب جديد</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, msg in messages %}
+              <div class="alert {{ 'alert-success' if category=='success' else 'alert-error' }}">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('auth.signup') }}">
+          <div class="form-group">
+            <label for="name">الاسم</label>
+            <div class="input-wrap">
+              <img class="field-icn" src="{{ url_for('static', filename='img/user.png') }}" alt="user">
+              <input type="text" id="name" name="name" required maxlength="30" placeholder="الاسم الكامل">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">البريد الإلكتروني</label>
+            <div class="input-wrap">
+              <img class="field-icn" src="{{ url_for('static', filename='img/mail.png') }}" alt="mail">
+              <input type="email" id="email" name="email" required maxlength="40" placeholder="البريد الإلكتروني">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">كلمة المرور</label>
+            <div class="input-wrap">
+              <img class="field-icn" src="{{ url_for('static', filename='img/lock.png') }}" alt="lock">
+              <input type="password" id="password" name="password" required minlength="8" placeholder="كلمة المرور">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm_password">تأكيد كلمة المرور</label>
+            <div class="input-wrap">
+              <img class="field-icn" src="{{ url_for('static', filename='img/lock.png') }}" alt="lock">
+              <input type="password" id="confirm_password" name="confirm_password" required minlength="8" placeholder="تأكيد كلمة المرور">
+            </div>
+          </div>
+
+          <button class="auth-btn" type="submit">إنشاء حساب</button>
+        </form>
+
+        <p class="auth-foot">لديك حساب؟ <a href="{{ url_for('auth.login') }}">تسجيل الدخول</a></p>
+      </section>
+
+    </div>
+  </div>
+</main>
+{% endblock %}

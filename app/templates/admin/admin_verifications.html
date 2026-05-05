@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}تيقّن | التلاوات والتحقق{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reports.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="side">
+    <nav class="side__nav">
+      <a class="side__item {% if request.endpoint == 'main.admin_dashboard' %}side__item--active{% endif %}" href="{{ url_for('main.admin_dashboard') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/zap.png') }}" alt="نظرة عامة"></span>
+        <span>نظرة عامة</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_users' %}side__item--active{% endif %}" href="{{ url_for('main.admin_users') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/users.png') }}" alt="المستخدمين"></span>
+        <span>إدارة المستخدمين</span>
+      </a>
+      <a class="side__item {% if request.endpoint == 'main.admin_verifications' %}side__item--active{% endif %}" href="{{ url_for('main.admin_verifications') }}">
+        <span class="side__icon"><img src="{{ url_for('static', filename='img/history.png') }}" alt="التلاوات"></span>
+        <span>التلاوات والتحقق</span>
+      </a>
+
+
+      <a class="side__item {% if request.endpoint == 'main.admin_reports' %}side__item--active{% endif %}" href="{{ url_for('main.admin_reports') }}">
+  <span class="side__icon"><img src="{{ url_for('static', filename='img/reportpage.png') }}" alt="التقارير"></span>
+  <span>التقارير العامة</span>
+</a>
+
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+
+    <!-- هيدر -->
+    <div class="rp-header">
+      <div>
+        <h1 class="rp-header__title">التلاوات ونتائج التحقق</h1>
+        <p class="rp-header__sub">عرض جميع عمليات التحقق في النظام</p>
+      </div>
+    </div>
+
+    <!-- شريط البحث -->
+    <div class="rp-card" style="margin-bottom:16px;">
+      <div class="ad-search-bar">
+        <div class="ad-search-wrap">
+          <img src="{{ url_for('static', filename='img/target.png') }}" alt="بحث">
+          <input type="text" class="ad-search" id="verifSearch" placeholder="ابحث في التلاوات...">
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التحققات -->
+    <div id="verifList">
+      {% if verifications %}
+        {% for v in verifications %}
+        <div class="ad-verif-card" style="margin-bottom:12px;"
+             data-info="{{ v.verifier.verifiername }} {{ v.surah.surahname if v.surah else '' }}">
+          <div class="ad-verif-card__left">
+            <div class="ad-avatar">{{ v.verifier.verifiername[0] }}</div>
+            <div class="ad-verif-card__info">
+              <div class="ad-verif-card__name">{{ v.verifier.verifiername }}</div>
+              <div class="ad-verif-card__meta">
+                {% if v.surah %}
+                <span>
+                  <img src="{{ url_for('static', filename='img/history.png') }}"
+                       style="width:14px;height:14px;object-fit:contain;vertical-align:middle;opacity:0.5;">
+                  {{ v.surah.surahname }}
+                </span>
+                {% endif %}
+                {% if v.startayah and v.endayah %}
+                <span>الآيات {{ v.startayah }}-{{ v.endayah }}</span>
+                {% endif %}
+                <span>{{ v.processingdate.strftime('%Y-%m-%d %H:%M') if v.processingdate else '—' }}</span>
+              </div>
+            </div>
+          </div>
+          <a href="{{ url_for('main.admin_user_detail', user_id=v.verifierid) }}" class="ad-btn-view">عرض التفاصيل</a>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="rp-card" style="text-align:center; color:#999; padding:40px;">
+          لا توجد تحققات مسجلة
+        </div>
+      {% endif %}
+    </div>
+
+  </main>
+</div>
+
+<script>
+var verifSearch = document.getElementById('verifSearch');
+if (verifSearch) {
+  verifSearch.addEventListener('input', function() {
+    var val = this.value.toLowerCase();
+    document.querySelectorAll('#verifList .ad-verif-card').forEach(function(card) {
+      var info = (card.dataset.info || '').toLowerCase();
+      card.style.display = info.includes(val) ? '' : 'none';
+    });
+  });
+}
+</script>
+{% endblock %}

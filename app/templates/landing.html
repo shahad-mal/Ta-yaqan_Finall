@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}الرئيسية | تيقّن{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="landing-page">
+<section class="hero">
+  <div class="container hero__grid">
+
+    <div class="hero__cardWrap">
+      <div class="glow"></div>
+
+      <div class="heroCard">
+        <div class="bars bars--top">
+          <span style="--h:40"></span><span style="--h:60"></span><span style="--h:45"></span>
+          <span style="--h:80"></span><span style="--h:70"></span><span style="--h:55"></span>
+          <span style="--h:90"></span><span style="--h:65"></span><span style="--h:50"></span>
+          <span style="--h:75"></span><span style="--h:60"></span><span style="--h:45"></span>
+          <span style="--h:70"></span><span style="--h:55"></span><span style="--h:40"></span>
+        </div>
+
+        <div class="verseBox">
+          <div class="verseText">﴾ الَّذِينَ آتَيْنَاهُمُ الْكِتَابَ يَتْلُونَهُ حَقَّ تِلَاوَتِهِ ﴿</div>
+          <div class="verseMeta">سورة البقرة - آية 121</div>
+        </div>
+
+        <div class="bars bars--bottom">
+          <span style="--h:35"></span><span style="--h:50"></span><span style="--h:40"></span>
+          <span style="--h:65"></span><span style="--h:55"></span><span style="--h:45"></span>
+          <span style="--h:75"></span><span style="--h:60"></span><span style="--h:50"></span>
+          <span style="--h:70"></span><span style="--h:55"></span><span style="--h:40"></span>
+          <span style="--h:60"></span><span style="--h:45"></span><span style="--h:35"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__text">
+      <div class="pill">
+        <img src="{{ url_for('static', filename='img/sparkle.png') }}" class="pill-icon" alt="sparkle">
+        نظام ذكي للتحقق من التلاوات
+      </div>
+
+      <h1 class="hero__title">
+        تيقّن – نظام التحقق من صحة وكمال تلاوات القرآن
+      </h1>
+
+      <p class="hero__desc">
+        نظام ويب متطور يستخدم تقنيات الذكاء الاصطناعي للتحقق من صحة وكمال التلاوات القرآنية،
+        ويكتشف الأخطاء والكلمات الناقصة أو الزائدة بدقة عالية، مع توفير تقارير تفصيلية شاملة.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="{{ url_for('auth.signup') }}">
+          <span class="btn-text">ابدأ التحقق الآن</span>
+          <img src="{{ url_for('static', filename='img/check.png') }}" class="btn-icon" alt="check">
+        </a>
+
+        <a class="btn btn--outline" href="/about">اعرف المزيد</a>
+      </div>
+    </div>  <!-- ✅ قفل hero__text -->
+
+  </div> <!-- ✅ قفل container hero__grid -->
+</section>
+
+<section class="features">
+  <div class="container">
+    <div class="sectionHead">
+      <h2>طرق الإدخال المتاحة</h2>
+      <p>اختر الطريقة الأنسب لك للتحقق من التلاوة</p>
+    </div>
+
+    <div class="cards2">
+      <div class="featureCard">
+        <div class="iconBox iconBox--main">
+          <img src="{{ url_for('static', filename='img/upload.png') }}" class="feature-icon" alt="upload">
+        </div>
+
+        <h3>رفع ملف صوت أو فيديو</h3>
+        <p>قم برفع التلاوة من جهازك مباشرة بصيغ متعددة</p>
+      </div>
+
+      <div class="featureCard">
+        <div class="iconBox iconBox--accent">
+          <img src="{{ url_for('static', filename='img/link.png') }}" class="feature-icon" alt="link">
+        </div>
+
+        <h3>إدخال رابط يوتيوب</h3>
+        <p>أدخل رابط أي تلاوة من يوتيوب للتحقق منها</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container stats__grid">
+    <div class="stat">
+      <div class="stat__num">{{ recitations_count_display }}</div>
+      <div class="stat__label">تلاوة تم التحقق منها</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num">{{ users_count_display }}</div>
+      <div class="stat__label">مستخدم</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num">24/7</div>
+      <div class="stat__label">متاح في أي وقت</div>
+    </div>
+  </div>
+</section>
+</main>
+{% endblock %}
